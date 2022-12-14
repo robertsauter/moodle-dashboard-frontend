@@ -7,5 +7,6 @@ dash.register_page(__name__,
                    title='Home')
 
 layout = html.Div(children=[
-    html.H1(children='Home page')
+    html.H1('Home page'),
+    html.P('This is the homepage of ')
 ])

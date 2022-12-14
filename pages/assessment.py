@@ -15,6 +15,6 @@ dash.register_page(__name__,
                    title='Assessment')
 
 layout = html.Div(children=[
-    html.H1(children='Assessment page'),
+    html.H1('Assessment page'),
     html.Div(children=json.dumps(data))
 ])
