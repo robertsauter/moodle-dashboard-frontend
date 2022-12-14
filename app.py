@@ -7,7 +7,7 @@ import dash_bootstrap_components as dbc
 app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.layout = html.Div([
-    dbc.Nav(
+    dbc.NavbarSimple(
         [
             dbc.NavLink(
                 [
@@ -18,12 +18,17 @@ app.layout = html.Div([
             )
             for page in dash.page_registry.values()
         ],
-        fill=True,
-        pills=True
+        brand='Moodle analytics dashboard',
+        fixed='top',
     ),
-    dbc.Container([
-        dash.page_container
-    ])
+    dbc.Container(
+        [
+            dash.page_container
+        ],
+        style={
+            'margin-top': '5rem'
+        }
+    )
 ])
 
 if __name__ == '__main__':

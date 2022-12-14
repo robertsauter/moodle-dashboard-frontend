@@ -8,5 +8,5 @@ dash.register_page(__name__,
 
 layout = html.Div(children=[
     html.H1('Home page'),
-    html.P('This is the homepage of ')
+    html.P('This is the homepage of the moodle analytics dashboard!')
 ])
