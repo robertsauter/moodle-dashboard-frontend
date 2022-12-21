@@ -69,7 +69,7 @@ layout = html.Div(children=[
                 style={'marginBottom': '1rem'}
             ) for assignment in assignments
         ],
-        style={'list-style': 'none', 'padding': '0', 'marginBottom': '5rem'}
+        style={'listStyle': 'none', 'padding': '0', 'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a python dict'),
     dcc.Graph(
