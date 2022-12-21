@@ -18,13 +18,11 @@ data = r.json()
 
 # This is a dummy list of assignments, that we can iterate over to display on the page
 assignments = [
-    {'title': 'Assigment 1', 'desc': 'Blablabla'},
-    {'title': 'Assigment 2', 'desc': 'Blablabla'},
-    {'title': 'Assigment 3', 'desc': 'Blablabla'},
-    {'title': 'Assigment 4', 'desc': 'Blablabla'},
-    {'title': 'Assigment 5', 'desc': 'Blablabla'},
-    {'title': 'Assigment 6', 'desc': 'Blablabla'},
-    {'title': 'Assigment 7', 'desc': 'Blablabla'}
+    {'title': 'Assigment 1', 'desc': 'Blablabla', 'done': True},
+    {'title': 'Assigment 2', 'desc': 'Blablabla', 'done': True},
+    {'title': 'Assigment 3', 'desc': 'Blablabla', 'done': False},
+    {'title': 'Assigment 4', 'desc': 'Blablabla', 'done': False},
+    {'title': 'Assigment 5', 'desc': 'Blablabla', 'done': False}
 ]
 # This is a python dict, that can be used to create a bar chart
 dict_figure = {
@@ -65,7 +63,8 @@ layout = html.Div(children=[
                             html.H4(assignment['title'], className='card-title'),
                             html.P(assignment['desc'], className='card-text')
                         ]
-                    )
+                    ),
+                    className='done' if assignment['done'] else ''
                 ),
                 style={'marginBottom': '1rem'}
             ) for assignment in assignments
