@@ -53,7 +53,7 @@ graph_object_figure = go.Figure(
 layout = html.Div(children=[
     html.H1(
         'Planning page',
-        style={'margin-bottom': '2rem'}
+        style={'marginBottom': '2rem'}
     ),
     html.H2('This is a list of items, to show you how to iterate and use bootstrap components'),
     html.Ul(
@@ -67,15 +67,15 @@ layout = html.Div(children=[
                         ]
                     )
                 ),
-                style={'margin-bottom': '1rem'}
+                style={'marginBottom': '1rem'}
             ) for assignment in assignments
         ],
-        style={'list-style': 'none', 'padding': '0', 'margin-bottom': '5rem'}
+        style={'list-style': 'none', 'padding': '0', 'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a python dict'),
     dcc.Graph(
         figure=dict_figure,
-        style={'margin-bottom': '5rem'}
+        style={'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a plotly graph object'),
     dcc.Graph(figure=graph_object_figure)
