@@ -26,7 +26,7 @@ app.layout = html.Div([
             dash.page_container
         ],
         style={
-            'margin-top': '5rem'
+            'marginTop': '5rem'
         }
     )
 ])
