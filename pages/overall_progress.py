@@ -134,18 +134,18 @@ layout = dbc.Container([
 """layout = html.Div(children=[
     html.H1(
         'Overall progress page',
-        style={'margin-bottom': '2rem'}
+        style={'marginBottom': '2rem'}
     ),
     html.H2('Just a simple progress bar from bootstrap'),
     dbc.Progress(
         value=progress,
         label=f'{progress}%',
-        style={'margin-bottom': '5rem'}
+        style={'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a python dict'),
     dcc.Graph(
         figure=dict_figure,
-        style={'margin-bottom': '5rem'}
+        style={'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a plotly graph object'),
     dcc.Graph(figure=graph_object_figure)

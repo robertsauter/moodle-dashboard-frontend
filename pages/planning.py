@@ -18,13 +18,11 @@ data = r.json()
 
 # This is a dummy list of assignments, that we can iterate over to display on the page
 assignments = [
-    {'title': 'Assigment 1', 'desc': 'Blablabla'},
-    {'title': 'Assigment 2', 'desc': 'Blablabla'},
-    {'title': 'Assigment 3', 'desc': 'Blablabla'},
-    {'title': 'Assigment 4', 'desc': 'Blablabla'},
-    {'title': 'Assigment 5', 'desc': 'Blablabla'},
-    {'title': 'Assigment 6', 'desc': 'Blablabla'},
-    {'title': 'Assigment 7', 'desc': 'Blablabla'}
+    {'title': 'Assigment 1', 'desc': 'Blablabla', 'done': True},
+    {'title': 'Assigment 2', 'desc': 'Blablabla', 'done': True},
+    {'title': 'Assigment 3', 'desc': 'Blablabla', 'done': False},
+    {'title': 'Assigment 4', 'desc': 'Blablabla', 'done': False},
+    {'title': 'Assigment 5', 'desc': 'Blablabla', 'done': False}
 ]
 # This is a python dict, that can be used to create a bar chart
 dict_figure = {
@@ -53,7 +51,7 @@ graph_object_figure = go.Figure(
 layout = html.Div(children=[
     html.H1(
         'Planning page',
-        style={'margin-bottom': '2rem'}
+        style={'marginBottom': '2rem'}
     ),
     html.H2('This is a list of items, to show you how to iterate and use bootstrap components'),
     html.Ul(
@@ -65,17 +63,18 @@ layout = html.Div(children=[
                             html.H4(assignment['title'], className='card-title'),
                             html.P(assignment['desc'], className='card-text')
                         ]
-                    )
+                    ),
+                    className='done' if assignment['done'] else ''
                 ),
-                style={'margin-bottom': '1rem'}
+                style={'marginBottom': '1rem'}
             ) for assignment in assignments
         ],
-        style={'list-style': 'none', 'padding': '0', 'margin-bottom': '5rem'}
+        style={'listStyle': 'none', 'padding': '0', 'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a python dict'),
     dcc.Graph(
         figure=dict_figure,
-        style={'margin-bottom': '5rem'}
+        style={'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a plotly graph object'),
     dcc.Graph(figure=graph_object_figure)

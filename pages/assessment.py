@@ -41,17 +41,17 @@ graph_object_figure = go.Figure(
 
 # This is the html layout, that is displayed on the page
 layout = html.Div(children=[
-    html.H1('Assessment page', style={'margin-bottom': '2rem'}),
+    html.H1('Assessment page', style={'marginBottom': '2rem'}),
     html.H2('Just a simple button, to show you how to use bootstrap components'),
     dbc.Button(
         "Click me, but I won't do anything!",
         color="primary",
-        style={'margin-bottom': '5rem'}
+        style={'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a python dict'),
     dcc.Graph(
         figure=dict_figure,
-        style={'margin-bottom': '5rem'}
+        style={'marginBottom': '5rem'}
     ),
     html.H2('Simple chart from a plotly graph object'),
     dcc.Graph(figure=graph_object_figure)
