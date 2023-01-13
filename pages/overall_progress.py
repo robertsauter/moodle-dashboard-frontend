@@ -9,11 +9,11 @@ dash.register_page(__name__,
                    path='/overall_progress',
                    name='Overall progress',
                    title='Overall progress')
-r = requests.get('http://localhost:5000/api/group/overall_progress')
+#r = requests.get('http://localhost:5000/api/group/overall_progress')
 
 
 # This is the JSON object, that you can use to populate your visualizations with data :)
-data = r.json()
+#data = r.json()
 
 
 # Value for the progress bar
