@@ -9,11 +9,11 @@ dash.register_page(__name__,
                    path='/assessment',
                    name='Assessment',
                    title='Assessment')
-#r = requests.get('http://localhost:5000/api/group/assessment')
+r = requests.get('http://localhost:5000/api/group/assessment')
 
 
 # This is the JSON object, that you can use to display your visualizations :)
-#data = r.json()
+data = r.json()
 
 
 # This is a python dict, that can be used to create a bar chart
