@@ -1,7 +1,7 @@
 import dash
 from dash import html
 from dash.dependencies import Input, Output
-from group_services.home_service import fetch_quiz_grades, do_something_with_user_id
+from group_services.app_service import fetch_quiz_grades, do_something_with_user_id
 
 dash.register_page(__name__,
                    path='/',
@@ -50,7 +50,7 @@ def fetch_data_on_user_select(user_id):
         html.H1('Callback depending on user id'),
         html.P('This is a callback, that gets triggered every time a user id gets selected. '
                'Use is to fetch data, that depends on the user id. '
-               f'The currently selected user is: {user_id}'),
+               f'The id of the currently selected user is: {user_id}'),
         html.P(f'Fetched data: {str(data)}')
     ]
     return content
