@@ -1,7 +1,7 @@
 # Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
 import dash
-from dash import Dash, html
+from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from group_services.app_service import fetch_users
@@ -13,9 +13,12 @@ app = Dash(
     suppress_callback_exceptions=True
 )
 
+users = fetch_users()
+
 app.layout = html.Div(
     id='onLoad',
     children=[
+        dcc.Store(id='userId', storage_type='local'),
         dbc.NavbarSimple(
             [
                 dbc.NavLink(
@@ -32,7 +35,14 @@ app.layout = html.Div(
         ),
         dbc.Container(
             [
-                html.Div(id='userSelectWrapper'),
+                dbc.Select(
+                    id='userSelect',
+                    options=[
+                        {'label': f'{user["firstname"]} {user["lastname"]}', 'value': user["id"]}
+                        for user in users
+                    ],
+                    value=1
+                ),
                 dash.page_container,
             ],
             style={
@@ -44,21 +54,11 @@ app.layout = html.Div(
 
 
 @dash.callback(
-    Output('userSelectWrapper', 'children'),
-    Input('onLoad', 'children'),
+    Output('userId', 'data'),
+    Input('userSelect', 'value'),
 )
-def get_users(children):
-    users = fetch_users()
-    content = dbc.Select(
-        id='userSelect',
-        options=[
-            {'label': f'{user["firstname"]} {user["lastname"]}', 'value': user["id"]}
-            for user in users
-        ],
-        value=1
-    ),
-
-    return content
+def set_user_id(user_id):
+    return user_id
 
 
 if __name__ == '__main__':

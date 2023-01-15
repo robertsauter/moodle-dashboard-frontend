@@ -40,7 +40,7 @@ def fetch_data_on_load(children):
 
 @dash.callback(
     Output('dataDependingOnUserId', 'children'),
-    Input('userSelect', 'value'),
+    Input('userId', 'data'),
 )
 def fetch_data_on_user_select(user_id):
 
