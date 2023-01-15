@@ -13,7 +13,6 @@ dash.register_page(__name__,
 r = requests.get('http://localhost:5000/api/group/overall_progress')
 
 
-# This is the JSON object, that you can use to populate your visualizations with data :)
 
 
 # here is the part that we should read our needed data from json file(s)!!
