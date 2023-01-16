@@ -30,11 +30,12 @@ def deadline(duedate_epoch):
   duedate_year = int(duedate_full[0:4])
   duedate_month = int(duedate_full[5:7])
   duedate_day = int(duedate_full[8:10])
+  duedate_time = str(duedate_full)[11:16]
 
   weekdayNumber = calendar.weekday(duedate_year, duedate_month, duedate_day)
   weekdayAbbr = dayAbbr[weekdayNumber]
 
-  deadlineStr = "due" + weekdayAbbr + ", " + str(duedate_day) + " " + monthAbbr[duedate_month] + " " + str(duedate_year)
+  deadlineStr = "due " + weekdayAbbr + ", " + str(duedate_day) + " " + monthAbbr[duedate_month] + " " + str(duedate_year) + " " + str(duedate_time)
   return deadlineStr
 
 
