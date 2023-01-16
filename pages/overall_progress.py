@@ -1,10 +1,9 @@
 import dash
 import pandas as pd
 import requests
-from dash import html, dcc
+from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-
 
 dash.register_page(__name__,
                    path='/overall_progress',
@@ -31,9 +30,36 @@ assignment_perc = perc[0][1]
 url_perc = perc[0][2]
 file_perc = perc[0][3]
 
+# putting together data for quiz-table
+quiz_data = pd.DataFrame()
+quiz_data['Completed'] = user_all_activities[user_all_activities['Component'] == "Quiz"]['Address']
+quiz_data['Uncompleted'] = unseen[unseen['Component'] == "Quiz"]['Event context']
+print(quiz_data.to_dict())
 
-
-
+# creating quiz-table
+quiz_table = dash_table.DataTable(
+    id='quiz_table',
+    columns=[{"name": i, "id": i, 'presentation':'markdown'}
+        for i in quiz_data.columns],
+    data=quiz_data.to_dict('records'),
+    style_cell={
+        'textAlign':'left',
+        'width': '{}%'.format(len(quiz_data.columns)),
+        'textOverflow': 'ellipsis',
+        'overflowY': 'auto',
+        'whiteSpace': 'normal',
+        'height': 'auto',
+    },
+    style_header=dict(backgroundColor="paleturquoise"),
+    style_data=dict(backgroundColor="lavender"),
+    style_table={
+            'maxHeight': '100%',
+            'maxWidth': 'width=550px',
+            'overflowY': 'auto',
+            'margin': '25px',
+            },
+    css=[{'selector': 'table', 'rule': 'table-layout: fixed'}],
+    )
 
 
 fig4 = go.Figure(data=[go.Table(
@@ -85,11 +111,13 @@ fig7.update_layout(width=550, height=250, autosize=False, margin=dict(l=15, r=15
 
 layout = dbc.Container([
     dbc.Row([
-        dbc.Col([html.H3("Quiz",style={'margin-left':'15px'}),
+        dbc.Col([
+            dbc.Row(children=[html.H3("Quiz",style={'margin-left':'15px'}),
                  dbc.Progress(label=quiz_perc, value=quiz_perc, max=100, striped=True, color="success",
-                              style={'hight': '20px','margin-left' :'20px'}), html.Br(),
-                 dcc.Graph(figure=fig4)], width=5, style={"height": "50vh"})
-        , dbc.Col([html.H3("Assignment",style={'margin-left':'15px'}),
+                              style={'hight': '20px','margin-left' :'20px'}), html.Br()]),
+            dbc.Row(children=[quiz_table], style={"height": "50vh"})
+        ], width=5),
+        dbc.Col([html.H3("Assignment",style={'margin-left':'15px'}),
                    dbc.Progress(label=assignment_perc, value=assignment_perc, max=100, striped=True,
                                 color="success", style={'hight': '20px','margin-left' :'20px'}), html.Br(),
                    dcc.Graph(figure=fig5)], width=5, style={"height": "50vh"})], justify='center'),
