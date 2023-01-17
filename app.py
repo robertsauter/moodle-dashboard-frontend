@@ -32,6 +32,7 @@ app.layout = html.Div(
             ],
             brand='Moodle analytics dashboard',
             fixed='top',
+            style =  {'background': 'linear-gradient(0deg, #e15707 0, #f28224 100%)'},
         ),
         dbc.Container(
             [
@@ -49,6 +50,7 @@ app.layout = html.Div(
                 'marginTop': '5rem'
             },
         )
+        
     ]
 )
 
@@ -58,7 +60,9 @@ app.layout = html.Div(
     Input('userSelect', 'value'),
 )
 def set_user_id(user_id):
+    print(user_id)
     return user_id
+
 
 
 if __name__ == '__main__':
