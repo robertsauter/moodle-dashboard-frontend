@@ -1,31 +1,53 @@
 import dash
 import requests
-from dash import html, dcc
-import plotly.graph_objects as go
+from dash import html#, dcc
+#import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
+import datetime
+import calendar
+from group_services.planning_service import operation
 
 
 dash.register_page(__name__,
                    path='/planning',
                    name='Planning',
                    title='Planning')
-r = requests.get('http://localhost:5000/api/group/planning')
 
 
 # This is the JSON object, that you can use to display your visualizations :)
-data = r.json()
+data = operation()
+
+# Calendar Arrays
+dayNames = [x for x in calendar.day_name]
+dayAbbr = [y for y in calendar.day_abbr]
+monthNames = [z for z in calendar.month_name]
+monthAbbr = [w for w in calendar.month_abbr]
+
+
+# Def
+def deadline(duedate_epoch):
+  duedate_full = str(datetime.datetime.fromtimestamp(duedate_epoch))
+  duedate_year = int(duedate_full[0:4])
+  duedate_month = int(duedate_full[5:7])
+  duedate_day = int(duedate_full[8:10])
+
+  weekdayNumber = calendar.weekday(duedate_year, duedate_month, duedate_day)
+  weekdayAbbr = dayAbbr[weekdayNumber]
+
+  deadlineStr = "due " + weekdayAbbr + ", " + str(duedate_day) + " " + monthAbbr[duedate_month] + " " + str(duedate_year)
+  return deadlineStr
 
 
 # This is a dummy list of assignments, that we can iterate over to display on the page
-assignments = [
+"""assignments = [
     {'title': 'Assigment 1', 'desc': 'Blablabla', 'done': True},
     {'title': 'Assigment 2', 'desc': 'Blablabla', 'done': True},
     {'title': 'Assigment 3', 'desc': 'Blablabla', 'done': False},
     {'title': 'Assigment 4', 'desc': 'Blablabla', 'done': False},
     {'title': 'Assigment 5', 'desc': 'Blablabla', 'done': False}
-]
+]"""
 # This is a python dict, that can be used to create a bar chart
-dict_figure = {
+"""dict_figure = {
     'data': [
         {
             'x': ['Assignment 1', 'Assignment 2', 'Assignment 3'],
@@ -45,7 +67,7 @@ graph_object_figure = go.Figure(
         title=go.layout.Title(text='Assignment grades')
     )
 )
-
+"""
 
 # This is the html layout, that is displayed on the page
 layout = html.Div(children=[
@@ -53,24 +75,30 @@ layout = html.Div(children=[
         'Planning page',
         style={'marginBottom': '2rem'}
     ),
-    html.H2('This is a list of items, to show you how to iterate and use bootstrap components'),
+    html.H2('To do:'),
     html.Ul(
         [
             html.Li(
                 dbc.Card(
                     dbc.CardBody(
                         [
-                            html.H4(assignment['title'], className='card-title'),
-                            html.P(assignment['desc'], className='card-text')
+                            html.H4(assignment['name'], className='card-title'),
+                            html.Img(src='assets/check2-circle.svg',
+                                     style={'position': 'absolute', 'top': '2rem', 'right': '2rem'}),
+                            html.H5(deadline(assignment['duedate']), className='deadline duedate'),
+                            html.P(assignment['intro'], className='card-text', style={'margin': '2rem'}),
+
                         ]
-                    ),
-                    className='done' if assignment['done'] else ''
+                    ), className='done'
+                    #className='done' if assignment['done'] else ''
                 ),
                 style={'marginBottom': '1rem'}
-            ) for assignment in assignments
+
+            ) for assignment in data["result_assign"]
         ],
         style={'listStyle': 'none', 'padding': '0', 'marginBottom': '5rem'}
     ),
+    """
     html.H2('Simple chart from a python dict'),
     dcc.Graph(
         figure=dict_figure,
@@ -78,4 +106,5 @@ layout = html.Div(children=[
     ),
     html.H2('Simple chart from a plotly graph object'),
     dcc.Graph(figure=graph_object_figure)
+"""
 ])
