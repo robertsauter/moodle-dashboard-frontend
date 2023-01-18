@@ -9,11 +9,11 @@ dash.register_page(__name__,
                    path='/planning',
                    name='Planning',
                    title='Planning')
-r = requests.get('http://localhost:5000/api/group/planning')
+#r = requests.get('http://localhost:5000/api/group/planning')
 
 
 # This is the JSON object, that you can use to display your visualizations :)
-data = r.json()
+#data = r.json()
 
 
 # This is a dummy list of assignments, that we can iterate over to display on the page

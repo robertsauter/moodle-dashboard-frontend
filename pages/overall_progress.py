@@ -4,18 +4,13 @@ import requests
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
+from group_services.overall_progress_service import fetch_data
 
 dash.register_page(__name__,
                    path='/overall_progress',
                    name='Overall progress',
                    title='Overall progress')
-r = requests.get('http://localhost:5000/api/group/overall_progress')
-
-
-
-
-# here is the part that we should read our needed data from json file(s)!!
-data = r.json()
+data = fetch_data()
 
 # getting the dataframes from the json file
 
