@@ -5,17 +5,17 @@ from dash import html#, dcc
 import dash_bootstrap_components as dbc
 import datetime
 import calendar
+from group_services.planning_service import operation
 
 
 dash.register_page(__name__,
                    path='/planning',
                    name='Planning',
                    title='Planning')
-r = requests.get('http://localhost:5000/api/group/planning')
 
 
 # This is the JSON object, that you can use to display your visualizations :)
-data = r.json()
+data = operation()
 
 # Calendar Arrays
 dayNames = [x for x in calendar.day_name]
@@ -30,12 +30,11 @@ def deadline(duedate_epoch):
   duedate_year = int(duedate_full[0:4])
   duedate_month = int(duedate_full[5:7])
   duedate_day = int(duedate_full[8:10])
-  duedate_time = str(duedate_full)[11:16]
 
   weekdayNumber = calendar.weekday(duedate_year, duedate_month, duedate_day)
   weekdayAbbr = dayAbbr[weekdayNumber]
 
-  deadlineStr = "due " + weekdayAbbr + ", " + str(duedate_day) + " " + monthAbbr[duedate_month] + " " + str(duedate_year) + " " + str(duedate_time)
+  deadlineStr = "due " + weekdayAbbr + ", " + str(duedate_day) + " " + monthAbbr[duedate_month] + " " + str(duedate_year)
   return deadlineStr
 
 
@@ -84,10 +83,13 @@ layout = html.Div(children=[
                     dbc.CardBody(
                         [
                             html.H4(assignment['name'], className='card-title'),
-                            html.H5(deadline(assignment['duedate']), className='deadline'),
-                            html.P(assignment['intro'], className='card-text')
+                            html.Img(src='assets/check2-circle.svg',
+                                     style={'position': 'absolute', 'top': '2rem', 'right': '2rem'}),
+                            html.H5(deadline(assignment['duedate']), className='deadline duedate'),
+                            html.P(assignment['intro'], className='card-text', style={'margin': '2rem'}),
+
                         ]
-                    ),
+                    ), className='done'
                     #className='done' if assignment['done'] else ''
                 ),
                 style={'marginBottom': '1rem'}
