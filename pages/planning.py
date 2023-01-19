@@ -7,16 +7,21 @@ import dash_bootstrap_components as dbc
 import datetime
 import calendar
 from group_services.planning_service import operation
-
+import re
 
 dash.register_page(__name__,
                    path='/planning',
                    name='Planning',
                    title='Planning')
 
-
 # This is the JSON object, that you can use to display your visualizations :)
 data = operation()
+
+# HTML Cleaner to remove tags
+CLEANR = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+def cleanhtml(raw_html):
+  cleantext = re.sub(CLEANR, '', raw_html)
+  return cleantext
 
 # Calendar Arrays
 dayNames = [x for x in calendar.day_name]
@@ -87,7 +92,7 @@ layout = html.Div(children=[
                             html.Img(src='assets/check2-circle.svg',
                                      style={'position': 'absolute', 'top': '2rem', 'right': '2rem'}),
                             html.H5(deadline(assignment['duedate']), className='deadline duedate'),
-                            html.P(assignment['intro'], className='card-text', style={'margin': '2rem'}),
+                            html.P(cleanhtml(assignment['intro']), className='card-text', style={'margin': '2rem'}),
 
                         ]
                     ), className='done'
