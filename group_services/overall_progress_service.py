@@ -8,9 +8,9 @@ def fetch_data(user_id):
     # df = pd.read_csv(r'C:\Users\admin\moodle-dashboard-backend\logs_LA_20__21_20221202-1706.csv')
 
     # reading the file from the repository
-    url = 'https://raw.githubusercontent.com/blueberryhub92/moodle-dashboard-backend/main/logs_LA_20__21_20221202-1706.csv'
+    url = 'logs_LA_20__21_20221202-1706.csv'
     df = pd.read_csv(url)
-
+    
     #  the list of all the enrolled users
     eu = ['anonfirstname31 anonlastname31', 'anonfirstname62 anonlastname62', 'anonfirstname65 anonlastname65',
      'anonfirstname51 anonlastname51', 'anonfirstname66 anonlastname66', 'anonfirstname47 anonlastname47',
