@@ -1,12 +1,9 @@
 import dash
-import requests
 from dash import html, dcc
-from group_services.app_service import fetch_users
-import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
-from dash import Dash, dcc, html, Input, Output, State
+from dash import Dash, dcc, html, Input, Output
 from functools import reduce
 from operator import add
 from group_services.assessment_service import operation
@@ -16,10 +13,6 @@ dash.register_page(__name__,
                    name='Assessment',
                    title='Assessment')
 app = Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
-
-#r = requests.get('http://localhost:5000/api/group/assessment')
-
-data = fetch_users()
 
 layout = html.Div([
     html.Div(id='dataDependingOnUserId2')
@@ -32,7 +25,6 @@ layout = html.Div([
 def fetch_data_on(user_id):
 
     # This is the JSON object, that you can use to display your visualizations :)
-    #data = r.json()
     data = operation(user_id)
 
     # getting the dataframes from the json file
