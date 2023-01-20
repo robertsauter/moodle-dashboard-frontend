@@ -20,12 +20,9 @@ layout = html.Div([
     Output('dataDependingOnUser', 'children'),
     Input('userId', 'data'),
 )
-def fetch_data_on_user(user_id):
-
-        user_data = fetch_grades(user_id)
-
+def fetch_selected_user_data(user_id):
         # This is the JSON object, that you can use to populate your visualizations with data :)
-        data = user_data
+        data = fetch_grades(user_id)
 
         # getting the dataframes from the json file
         user_all_activities = pd.read_json(data[0])
