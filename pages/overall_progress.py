@@ -1,10 +1,8 @@
 import dash
-import requests
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-from group_services.overall_progress_service import fetch_data
-from group_services.app_service import fetch_users
+from group_services.overall_progress_service import fetch_grades
 import pandas as pd
 from dash.dependencies import Input, Output
 
@@ -13,15 +11,10 @@ dash.register_page(__name__,
                    path='/overall_progress',
                    name='Overall progress',
                    title='Overall progress')
-#r = requests.get('http://localhost:5000/api/group/overall_progress')
-# You can just fetch data in the layout file, if it does not depend on the user id.
-
-data = fetch_users()
 
 layout = html.Div([
     html.Div(id='dataDependingOnUser')
 ])
-
 
 @dash.callback(
     Output('dataDependingOnUser', 'children'),
@@ -29,15 +22,12 @@ layout = html.Div([
 )
 def fetch_data_on_user(user_id):
 
-        #user_data = do_something_with_user_id(user_id)
-        user_data = fetch_data(user_id)
+        user_data = fetch_grades(user_id)
 
-        data = user_data
         # This is the JSON object, that you can use to populate your visualizations with data :)
-        #data = user_data.json()
+        data = user_data
 
         # getting the dataframes from the json file
-
         user_all_activities = pd.read_json(data[0])
         unseen = pd.read_json(data[1])
         perc = pd.read_json(data[2])
