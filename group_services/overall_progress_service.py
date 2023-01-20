@@ -3,7 +3,7 @@ import pandas as pd
 import math
 
 
-def fetch_grades(user_id):
+def fetch_data(user_id):
     # reading the file localy
     # df = pd.read_csv(r'C:\Users\admin\moodle-dashboard-backend\logs_LA_20__21_20221202-1706.csv')
 
