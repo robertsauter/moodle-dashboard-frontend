@@ -16,7 +16,7 @@ class SSHTunnelHandler:
         self.credentials = credentials
         self.tunnel = None
 
-    def open_ssh_tunnel(self, verbose=False) -> tuple[SSHTunnelForwarder, str]:
+    def open_ssh_tunnel(self, verbose=False):
         try:
             if verbose:
                 sshtunnel.DEFAULT_LOGLEVEL = logging.DEBUG
@@ -44,7 +44,7 @@ class SQLConnectionHandler:
         self.credentials = credentials
         self.connection = None
 
-    def mysql_connect(self, tunnel) -> tuple[Connection, str]:
+    def mysql_connect(self, tunnel):
         try:
             self.connection = pymysql.connect(
                 host='127.0.0.1',
@@ -104,7 +104,7 @@ class SQLHandlerFacade:
         self.sql_connection_handler = SQLConnectionHandler(credentials=credentials)
         self.query_handler = QueryHandler(query)
 
-    def operation(self) -> tuple[dict[str, list | None | list[str | Any]], DataFrame]:
+    def operation(self):
         results = ["SQL handler facade initializes subsystems..."]
         tunnel, log = self.ssh_tunnel_handler.open_ssh_tunnel()
         results.append(log)
