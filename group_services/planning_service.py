@@ -43,9 +43,9 @@ def assignmentsToDisplay(user, dataset):
 
   for submission in dataset["result_assign_submission"]: # going through
     statusDict = {}
-    if submission["userid"] == user: # pick submissions from the user
+    if int(submission["userid"]) == int(user): # pick submissions from the user
       for assignment in dataset["result_assign"]: #going through
-        if submission["assignment"] == assignment["id"]: # pick the assignment
+        if int(submission["assignment"]) == int(assignment["id"]): # pick the assignment
           statusDict["status"] = submission["status"] # status as a dictionary
           assignment.update(statusDict) # append status to assignment
           assignmentsList.append(assignment) # append dict to the list
