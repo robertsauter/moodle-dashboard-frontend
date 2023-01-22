@@ -6,9 +6,6 @@ import csv
 from lib.sql_handler import SQLHandlerFacade
 
 def fetch_data(user_id):
-    # reading the file localy
-    # df = pd.read_csv(r'C:\Users\admin\moodle-dashboard-backend\logs_LA_20__21_20221202-1706.csv')
-
     # reading the file from the repository
     url = 'logs_LA_20__21_20221202-1706.csv'
     df = pd.read_csv(url)
