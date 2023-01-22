@@ -30,11 +30,14 @@ app.layout = html.Div(
                 )
                 for page in dash.page_registry.values()
             ],
-            brand=html.Img(src='/assets/Moodle-Icon-1024-corners.png', className="ml-auto", style={'height':'50px', 'width':'50px'}), # orange icon
-            #brand=html.Img(src='/assets/icon-moodle.png', className="ml-auto", style={'height':'50px', 'width':'95px'}), # blue icon
+            # html.Img(src='/assets/Moodle-Icon-1024-corners.png', className="ml-auto",
+            # style={'height': '50px', 'width': '50px'}),  # orange icon
+            # blue icon
+            # brand=html.Img(src='/assets/icon-moodle.png', className="ml-auto",
+            # style={'height':'50px', 'width':'95px'}),
             fixed='top',
-            style =  {'background': 'linear-gradient(0deg, #e15707 0, #f28224 100%)'},
-            #style =  {'background': 'linear-gradient(0deg, #0971B5 0, #00AEEE 100%)'}, #blue theme
+            style={'background': 'linear-gradient(0deg, #e15707 0, #f28224 100%)'},
+            # style =  {'background': 'linear-gradient(0deg, #0971B5 0, #00AEEE 100%)'}, #blue theme
         ),
         dbc.Container(
             [
@@ -57,7 +60,7 @@ app.layout = html.Div(
                 'box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
             },
         )
-        
+
     ]
 )
 
@@ -67,9 +70,7 @@ app.layout = html.Div(
     Input('userSelect', 'value'),
 )
 def set_user_id(user_id):
-    #print(user_id)
     return user_id
-
 
 
 if __name__ == '__main__':
