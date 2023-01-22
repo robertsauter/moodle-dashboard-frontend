@@ -1,7 +1,9 @@
 import json
 import pandas as pd
 import math
+import csv
 
+from lib.sql_handler import SQLHandlerFacade
 
 def fetch_data(user_id):
     # reading the file localy
@@ -10,19 +12,20 @@ def fetch_data(user_id):
     # reading the file from the repository
     url = 'logs_LA_20__21_20221202-1706.csv'
     df = pd.read_csv(url)
-    
-    #  the list of all the enrolled users
-    eu = ['anonfirstname31 anonlastname31', 'anonfirstname62 anonlastname62', 'anonfirstname65 anonlastname65',
-     'anonfirstname51 anonlastname51', 'anonfirstname66 anonlastname66', 'anonfirstname47 anonlastname47',
-     'anonfirstname48 anonlastname48', 'anonfirstname68 anonlastname68', 'anonfirstname59 anonlastname59',
-     'anonfirstname64 anonlastname64', 'anonfirstname67 anonlastname67', 'anonfirstname53 anonlastname53',
-     'anonfirstname49 anonlastname49', 'anonfirstname55 anonlastname55', 'anonfirstname73 anonlastname73',
-     'anonfirstname60 anonlastname60', 'anonfirstname57 anonlastname57', 'anonfirstname70 anonlastname70',
-     'anonfirstname63 anonlastname63', 'anonfirstname54 anonlastname54', 'anonfirstname56 anonlastname56',
-     'anonfirstname61 anonlastname61', 'anonfirstname69 anonlastname69', 'anonfirstname58 anonlastname58',
-     'anonfirstname52 anonlastname52', 'anonfirstname71 anonlastname71', 'anonfirstname72 anonlastname72',
-     'anonfirstname21 anonlastname21']
 
+    # get list of enrolled users through sql query
+    quiz_grades_handler = SQLHandlerFacade(query="SELECT u.firstname, u.lastname FROM mdl_user_enrolments ue JOIN mdl_enrol e ON e.id = ue.enrolid JOIN mdl_course c ON c.id = e.courseid JOIN mdl_user u ON u.id = ue.userid WHERE c.id = 3;")
+    operation_result, quiz_grades_df = quiz_grades_handler.operation()
+    eu = quiz_grades_df.apply(lambda x: x.str.cat(sep=' '), axis=1).tolist()
+
+    # get list of enrolled users through csv file
+    # eu = []
+    # with open('enrolled_users_course_3.csv', newline='', encoding='utf-8') as csvfile:
+    #     reader = csv.reader(csvfile, delimiter=',')
+    #     # Skip the first row (header)
+    #     next(reader)
+    #     for row in reader:
+    #         eu.append(row[0] + ' ' + row[1])
 
     #default_user = str(63)
     default_user = str(int(user_id)-2)

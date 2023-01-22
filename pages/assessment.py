@@ -88,7 +88,8 @@ def fetch_data_on(user_id):
     '''
 
     # fetching all Quizzes grades of the given user if not available then 0
-    quizes_all = ['quiz 1', 'quiz 2', 'quiz 3', 'quiz 4', 'quiz 5', 'quiz 6', 'quiz final']
+    # quizes_all = ['quiz 1', 'quiz 2', 'quiz 3', 'quiz 4', 'quiz 5', 'quiz 6', 'quiz final']
+    quizes_all = ['quiz 1', 'quiz 2', 'quiz 3', 'quiz 4', 'quiz 5', 'quiz 6', 'quiz 7', 'quiz 8', 'quiz 9']
     grades = []
     for i in range(len(quizes_all)):
         try:
@@ -129,7 +130,9 @@ def fetch_data_on(user_id):
 
 
     # fetching all Assignment grades of the given user if not available then 0
-    assem_all = ['AS1 - W3', 'AS2 - W5', 'AS3 - W10', 'AS4 - W11']
+    # assem_all = ['AS1 - W3', 'AS2 - W5', 'AS3 - W10', 'AS4 - W11']
+    assem_all = ['AS1', 'AS2', 'AS3', 'AS4', 'AS5', 'AS6', 'AS7', 'AS8', 'AS9', 'AS10',
+    'AS11', 'AS12', 'AS13', 'AS14']
     assa_grades = []
     for i in range(len(assem_all)):
         try:
