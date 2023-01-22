@@ -15,14 +15,14 @@ dash.register_page(__name__,
 app = Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
 
 layout = html.Div([
-    html.Div(id='dataDependingOnUserId2')
+    html.Div(id='assessmentDataDependingOnUserId')
 ])
 
 @dash.callback(
-    Output('dataDependingOnUserId2', 'children'),
+    Output('assessmentDataDependingOnUserId', 'children'),
     Input('userId', 'data'),
 )
-def fetch_data_on(user_id):
+def fetch_selected_assessment(user_id):
 
     # This is the JSON object, that you can use to display your visualizations :)
     data = operation(user_id)

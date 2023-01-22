@@ -13,14 +13,14 @@ dash.register_page(__name__,
                    title='Overall progress')
 
 layout = html.Div([
-    html.Div(id='dataDependingOnUser')
+    html.Div(id='progressDataDependingOnUserId')
 ])
 
 @dash.callback(
-    Output('dataDependingOnUser', 'children'),
+    Output('progressDataDependingOnUserId', 'children'),
     Input('userId', 'data'),
 )
-def fetch_selected_user_data(user_id):
+def fetch_selected_progress(user_id):
         # This is the JSON object, that you can use to populate your visualizations with data :)
         data = fetch_data(user_id)
 
@@ -37,11 +37,7 @@ def fetch_selected_user_data(user_id):
         url_perc = perc[0][2]
         file_perc = perc[0][3]
 
-
-
-
         # creating quiz-tables
-
 
         # one column datatable
         # erste quiz data table(completed quizes)

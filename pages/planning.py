@@ -44,37 +44,6 @@ def deadline(duedate_epoch):
   return deadlineStr
 
 
-# This is a dummy list of assignments, that we can iterate over to display on the page
-"""assignments = [
-    {'title': 'Assigment 1', 'desc': 'Blablabla', 'done': True},
-    {'title': 'Assigment 2', 'desc': 'Blablabla', 'done': True},
-    {'title': 'Assigment 3', 'desc': 'Blablabla', 'done': False},
-    {'title': 'Assigment 4', 'desc': 'Blablabla', 'done': False},
-    {'title': 'Assigment 5', 'desc': 'Blablabla', 'done': False}
-]"""
-# This is a python dict, that can be used to create a bar chart
-"""dict_figure = {
-    'data': [
-        {
-            'x': ['Assignment 1', 'Assignment 2', 'Assignment 3'],
-            'y': [10, 1, 5],
-            'type': 'bar',
-            'name': 'Grades'
-        }
-    ],
-    'layout': {
-        'title': 'Assignment grades'
-    }
-}
-# This is a plotly graph object to create the same bar chart
-graph_object_figure = go.Figure(
-    data=[go.Bar(x=['Assignment 1', 'Assignment 2', 'Assignment 3'], y=[10, 1, 5])],
-    layout=go.Layout(
-        title=go.layout.Title(text='Assignment grades')
-    )
-)
-"""
-
 # This is the html layout, that is displayed on the page
 layout = html.Div(children=[
     html.H1(
