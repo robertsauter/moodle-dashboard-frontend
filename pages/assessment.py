@@ -34,12 +34,16 @@ def fetch_selected_assessment(user_id):
     # creating bar chart for quiz
     fig1 = px.bar(quiz_grades_df_edited, x='quiz', y='grade',
                   labels={'quiz': '<b> quiz name <b>', 'grade': '<b> your grade <b>'}
-                  , title='Quiz Grades', color='quiz', text='grade', range_y=[0, 12])
+                  , color='quiz', text='grade', range_y=[0, 12],
+                  #title='Quiz Grades'
+                  )
 
     # creating bar chart for assignment
     fig2 = px.bar(assign_edited, x='assignment', y='grade',
                   labels={'assignment': '<b> assignment name <b>', 'grade': '<b> your grade <b>'}
-                  , title='<b> Assignment Grades <b>', color='assignment', text='grade', range_y=[0, 12])
+                  ,  color='assignment', text='grade', range_y=[0, 12]
+                  #, title='<b> Assignment Grades <b>'
+                  )
 
     # changing the quiz text size and background
     fig1.update_traces(texttemplate='%{text:.2s}', textposition='outside')
@@ -72,8 +76,8 @@ def fetch_selected_assessment(user_id):
     fig1.update_xaxes(tickfont_size=12, title_font_family="Arial", tickwidth=10, showgrid=False)
 
     # Update y-axis properties
-    fig1.update_yaxes(tickfont_size=11, title_font_family="Arial", tickwidth=10)
-    fig2.update_yaxes(tickfont_size=11, title_font_family="Arial", tickwidth=10, showgrid=False)
+    fig1.update_yaxes(tickfont_size=1, title_font_family="Arial", tickwidth=10)
+    fig2.update_yaxes(tickfont_size=1, title_font_family="Arial", tickwidth=10, showgrid=False)
 
     # name of quizzes
     attended_quizzes = data[2]
@@ -215,6 +219,8 @@ def fetch_selected_assessment(user_id):
             target="popover-target",
             trigger="click",
         ),
+
+        html.Br(),html.Br(),html.Br(),html.Br(),
 
         html.H2('Assignment Grades'),
         dcc.Graph(figure=fig2),
