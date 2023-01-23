@@ -1,4 +1,21 @@
 .done {
     background-color: #198754;
     color: white;
+    border-radius: 10px;
+
+}
+
+.unfinished {
+    background-color: #df4759;
+    color: white;
+    border-radius: 10px;
+}
+
+.duedate {
+    margin-left: 1rem;
+
+}
+
+.card-title{
+    font-weight: 600;
 }
