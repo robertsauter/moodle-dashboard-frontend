@@ -2,10 +2,11 @@ import dash
 from dash import html, dcc, dash_table
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-from group_services.overall_progress_service import fetch_data
+from group_services.overall_progress_service import operation, fetch_data
 import pandas as pd
 from dash.dependencies import Input, Output
 
+progress_data = operation()
 
 dash.register_page(__name__,
                    path='/overall_progress',
@@ -21,8 +22,9 @@ layout = html.Div([
     Input('userId', 'data'),
 )
 def fetch_selected_progress(user_id):
+
         # This is the JSON object, that you can use to populate your visualizations with data :)
-        data = fetch_data(user_id)
+        data = fetch_data(user_id, progress_data)
 
         # getting the dataframes from the json file
         user_all_activities = pd.read_json(data[0])

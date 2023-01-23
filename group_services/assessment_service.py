@@ -7,7 +7,7 @@ import pandas as pd
 # Fetching data and pass them to frontend #
 # #########################################
 
-def operation(user_id) -> dict:
+def operation():
     """
             Returns a list of quiz and assumption grades and pass them to the frontend.
             Parameters:
@@ -16,23 +16,16 @@ def operation(user_id) -> dict:
                       list_df (dict): Values of grades as new dictionary
                       initialized from a mapping object's (key, value) pairs.
     """
+    # fetch quiz grades and assign grades from the database
+    operation_result, quiz_grades_df = fetch_quiz_grades()
+    operation_result, assign_grades_df = fetch_assignment_grades()
+    return quiz_grades_df, assign_grades_df
+
+def get_results(user_id, data):
     # logged in user
     # current_user = 49
     current_user = int(user_id) - 2
-
-    # fetch quiz grades and assign grades from the database
-    operation_result, quiz_grades_df = fetch_quiz_grades()
-
-    operation_result, assign_grades_df = fetch_assignment_grades()
-
-    '''
-    #fetch the data locylly
-    assign_grades_df = pd.read_csv('mdl_assign_grades.csv',
-                                   on_bad_lines='skip', encoding='utf-8')
-    quiz_grades_df = pd.read_csv('mdl_quiz_grades.csv',
-                                   on_bad_lines='skip', encoding='utf-8')
-    '''
-
+    quiz_grades_df, assign_grades_df = data
     # Work with pandas.
     # convert the grade type to float
     quiz_grades_df.grade = quiz_grades_df.grade.astype(float)

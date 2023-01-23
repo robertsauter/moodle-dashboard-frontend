@@ -2,11 +2,14 @@ import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 import pandas as pd
+from group_services.app_service import fetch_assignment_grades, fetch_quiz_grades
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 from functools import reduce
 from operator import add
-from group_services.assessment_service import operation
+from group_services.assessment_service import get_results, operation
+
+assessment_data = operation()
 
 dash.register_page(__name__,
                    path='/assessment',
@@ -25,7 +28,7 @@ layout = html.Div([
 def fetch_selected_assessment(user_id):
 
     # This is the JSON object, that you can use to display your visualizations :)
-    data = operation(user_id)
+    data = get_results(user_id, assessment_data)
 
     # getting the dataframes from the json file
     quiz_grades_df_edited = pd.read_json(data[0])
