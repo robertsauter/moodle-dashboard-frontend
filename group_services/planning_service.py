@@ -37,11 +37,19 @@ def deadline(duedate_epoch):
                 str(duedate_time)
   return deadlineStr
 
+# Fake current time
+def currentDate():
+  current_date = datetime.datetime.now() # current date/time
+  current_date_epoch = current_date.timestamp() # converting into epoch time
+  fake_current_date = float(current_date_epoch) - float(94694400) # subtracting 3 years
+
+  return fake_current_date
+
 # List of assignments
 def assignmentsToDisplay(user, dataset):
   assignmentsList = []
 
-  for submission in dataset["result_assign_submission"]: # going through
+  for submission in dataset["result_assign_submission"]: # going through submissions
     statusDict = {}
     if int(submission["userid"]) == int(user): # pick submissions from the user
       for assignment in dataset["result_assign"]: #going through
