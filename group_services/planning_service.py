@@ -59,3 +59,14 @@ def assignmentsToDisplay(user, dataset):
           assignmentsList.append(assignment) # append dict to the list
 
   return(assignmentsList)
+
+# Icons
+def whichIcon(status):
+    if status == "submitted":
+        icon_src = "assets/check2-circle.svg"
+    elif status == "unfinished":
+        icon_src = "assets/x-circle.svg"
+    else:
+        icon_src = ""
+
+    return icon_src
