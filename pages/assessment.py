@@ -35,8 +35,8 @@ def fetch_selected_assessment(user_id):
     assign_edited = pd.read_json(data[1])
 
     # just a checker
-    print(quiz_grades_df_edited)
-    print(assign_edited)
+    #print(quiz_grades_df_edited)
+    #print(assign_edited)
 
     # This is a plotly graph object to create the same bar chart
 
@@ -117,7 +117,7 @@ def fetch_selected_assessment(user_id):
 
     # calculating the total assignment grades
     totalGrade = reduce(add, grades)
-    print(totalGrade)
+    #print(totalGrade)
 
     # Feedback possibilities for Quizzes
     if grades[0] + grades[1] + grades[2] >= 22 and grades[3] + grades[4] + grades[5] >= 22 and grades[
@@ -160,7 +160,7 @@ def fetch_selected_assessment(user_id):
 
     # calculating the total assignment grades
     totalasGrade = reduce(add, assa_grades)
-    print(totalasGrade)
+    #print(totalasGrade)
 
     # Feedback possibilities for assignment
     if assa_grades[0] + assa_grades[1] >= 14 and assa_grades[2]+assa_grades[3] >= 14 or totalasGrade >= 28:
