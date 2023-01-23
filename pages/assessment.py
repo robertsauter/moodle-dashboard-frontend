@@ -2,11 +2,14 @@ import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 import pandas as pd
+from group_services.app_service import fetch_assignment_grades, fetch_quiz_grades
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 from functools import reduce
 from operator import add
-from group_services.assessment_service import operation
+from group_services.assessment_service import get_results, operation
+
+assessment_data = operation()
 
 dash.register_page(__name__,
                    path='/assessment',
@@ -15,25 +18,25 @@ dash.register_page(__name__,
 app = Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
 
 layout = html.Div([
-    html.Div(id='dataDependingOnUserId2')
+    html.Div(id='assessmentDataDependingOnUserId')
 ])
 
 @dash.callback(
-    Output('dataDependingOnUserId2', 'children'),
+    Output('assessmentDataDependingOnUserId', 'children'),
     Input('userId', 'data'),
 )
-def fetch_data_on(user_id):
+def fetch_selected_assessment(user_id):
 
     # This is the JSON object, that you can use to display your visualizations :)
-    data = operation(user_id)
+    data = get_results(user_id, assessment_data)
 
     # getting the dataframes from the json file
     quiz_grades_df_edited = pd.read_json(data[0])
     assign_edited = pd.read_json(data[1])
 
     # just a checker
-    print(quiz_grades_df_edited)
-    print(assign_edited)
+    #print(quiz_grades_df_edited)
+    #print(assign_edited)
 
     # This is a plotly graph object to create the same bar chart
 
@@ -88,7 +91,8 @@ def fetch_data_on(user_id):
     '''
 
     # fetching all Quizzes grades of the given user if not available then 0
-    quizes_all = ['quiz 1', 'quiz 2', 'quiz 3', 'quiz 4', 'quiz 5', 'quiz 6', 'quiz final']
+    # quizes_all = ['quiz 1', 'quiz 2', 'quiz 3', 'quiz 4', 'quiz 5', 'quiz 6', 'quiz final']
+    quizes_all = ['quiz 1', 'quiz 2', 'quiz 3', 'quiz 4', 'quiz 5', 'quiz 6', 'quiz 7', 'quiz 8', 'quiz 9']
     grades = []
     for i in range(len(quizes_all)):
         try:
@@ -113,7 +117,7 @@ def fetch_data_on(user_id):
 
     # calculating the total assignment grades
     totalGrade = reduce(add, grades)
-    print(totalGrade)
+    #print(totalGrade)
 
     # Feedback possibilities for Quizzes
     if grades[0] + grades[1] + grades[2] >= 22 and grades[3] + grades[4] + grades[5] >= 22 and grades[
@@ -129,7 +133,9 @@ def fetch_data_on(user_id):
 
 
     # fetching all Assignment grades of the given user if not available then 0
-    assem_all = ['AS1 - W3', 'AS2 - W5', 'AS3 - W10', 'AS4 - W11']
+    # assem_all = ['AS1 - W3', 'AS2 - W5', 'AS3 - W10', 'AS4 - W11']
+    assem_all = ['AS1', 'AS2', 'AS3', 'AS4', 'AS5', 'AS6', 'AS7', 'AS8', 'AS9', 'AS10',
+    'AS11', 'AS12', 'AS13', 'AS14']
     assa_grades = []
     for i in range(len(assem_all)):
         try:
@@ -154,7 +160,7 @@ def fetch_data_on(user_id):
 
     # calculating the total assignment grades
     totalasGrade = reduce(add, assa_grades)
-    print(totalasGrade)
+    #print(totalasGrade)
 
     # Feedback possibilities for assignment
     if assa_grades[0] + assa_grades[1] >= 14 and assa_grades[2]+assa_grades[3] >= 14 or totalasGrade >= 28:
