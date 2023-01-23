@@ -1,9 +1,8 @@
 import json
 import pandas as pd
 import math
-import csv
+from group_services.app_service import fetch_users_names
 
-from lib.sql_handler import SQLHandlerFacade
 
 def fetch_data(user_id):
     # reading the file from the repository
@@ -11,8 +10,9 @@ def fetch_data(user_id):
     df = pd.read_csv(url)
 
     # get list of enrolled users through sql query
-    quiz_grades_handler = SQLHandlerFacade(query="SELECT u.firstname, u.lastname FROM mdl_user_enrolments ue JOIN mdl_enrol e ON e.id = ue.enrolid JOIN mdl_course c ON c.id = e.courseid JOIN mdl_user u ON u.id = ue.userid WHERE c.id = 3;")
-    operation_result, quiz_grades_df = quiz_grades_handler.operation()
+    # quiz_grades_handler = SQLHandlerFacade(query="SELECT u.firstname, u.lastname FROM mdl_user_enrolments ue JOIN mdl_enrol e ON e.id = ue.enrolid JOIN mdl_course c ON c.id = e.courseid JOIN mdl_user u ON u.id = ue.userid WHERE c.id = 3;")
+    # operation_result, quiz_grades_df = quiz_grades_handler.operation()
+    operation_result, quiz_grades_df = fetch_users_names()
     eu = quiz_grades_df.apply(lambda x: x.str.cat(sep=' '), axis=1).tolist()
 
     # get list of enrolled users through csv file

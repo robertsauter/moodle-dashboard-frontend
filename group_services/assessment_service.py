@@ -1,5 +1,5 @@
 import json
-from lib.sql_handler import SQLHandlerFacade
+from group_services.app_service import fetch_quiz_grades, fetch_assignment_grades
 import pandas as pd
 
 
@@ -8,111 +8,135 @@ import pandas as pd
 # #########################################
 
 def operation(user_id) -> dict:
-        """
-          Returns a list of quiz and assumption grades and pass them to the frontend.
-                  Parameters:
-                          ! current_user (int): the logged-in user can be added as a parameter.
-                  Returns:
-                          list_df (dict): Values of grades as new dictionary
-                          initialized from a mapping object's (key, value) pairs.
-        """
-        # logged in user
-        #current_user = 49
-        current_user = int(user_id)-2
-        #print(current_user)
-        
-        # fetch quiz grades and assign grades from the database
-        quiz_grades_handler = SQLHandlerFacade(query="SELECT qg.id, qg.quiz, qg.userid, qg.grade, qg.timemodified FROM mdl_user_enrolments ue JOIN mdl_enrol e ON e.id = ue.enrolid JOIN mdl_course c ON c.id = e.courseid JOIN mdl_user u ON u.id = ue.userid JOIN mdl_quiz_grades qg ON qg.userid = u.id WHERE c.id = 3")
-        operation_result, quiz_grades_df = quiz_grades_handler.operation()
+    """
+            Returns a list of quiz and assumption grades and pass them to the frontend.
+            Parameters:
+                      ! current_user (int): the logged-in user can be added as a parameter.
+            Returns:
+                      list_df (dict): Values of grades as new dictionary
+                      initialized from a mapping object's (key, value) pairs.
+    """
+    # logged in user
+    # current_user = 49
+    current_user = int(user_id) - 2
 
-        assign_grade_handler = SQLHandlerFacade(query="SELECT ag.id, ag.assignment, ag.userid, ag.timecreated, ag.timemodified, ag.grader, ag.grade, ag.attemptnumber FROM mdl_user_enrolments ue JOIN mdl_enrol e ON e.id = ue.enrolid JOIN mdl_course c ON c.id = e.courseid JOIN mdl_user u ON u.id = ue.userid JOIN mdl_assign_grades ag ON ag.userid = u.id WHERE c.id = 3; ")
-        operation_result, assign_grades_df = assign_grade_handler.operation()
+    # fetch quiz grades and assign grades from the database
+    operation_result, quiz_grades_df = fetch_quiz_grades()
 
-        # fetch quiz grades and assign grades from csv files
-        #assign_grades_df = pd.read_csv('mdl_assign_grades.csv',
-        #                               on_bad_lines='skip', encoding='utf-8')
-        # quiz_grades_df = pd.read_csv('mdl_quiz_grades.csv',
-        #                              on_bad_lines='skip', encoding='utf-8')
+    operation_result, assign_grades_df = fetch_assignment_grades()
 
-        # Work with pandas.
+    '''
+    #fetch the data locylly
+    assign_grades_df = pd.read_csv('mdl_assign_grades.csv',
+                                   on_bad_lines='skip', encoding='utf-8')
+    quiz_grades_df = pd.read_csv('mdl_quiz_grades.csv',
+                                   on_bad_lines='skip', encoding='utf-8')
+    '''
 
-        # convert the grade type to float
-        quiz_grades_df.grade = quiz_grades_df.grade.astype(float)
-        quiz_grades_df['grade'] = quiz_grades_df['grade'].fillna(.0).astype(float)
+    # Work with pandas.
+    # convert the grade type to float
+    quiz_grades_df.grade = quiz_grades_df.grade.astype(float)
+    quiz_grades_df['grade'] = quiz_grades_df['grade'].fillna(.0).astype(float)
 
-        # display the panda file as float .0
-        pd.options.display.float_format = '{:,.0f}'.format
+    # get a unique quizzes
+    all_quizzes = quiz_grades_df['quiz'].unique()
+    # get a unique assignment
+    all_assignment = assign_grades_df['assignment'].unique()
+    max_value_of_each_quiz = quiz_grades_df['grade'].groupby(quiz_grades_df['quiz']).max().to_frame()
+    d = pd.DataFrame(max_value_of_each_quiz).astype(int)
+    a = d.values.tolist()
+    max_value_of_each_quiz1 = sum(a, [])
 
-        # changing the values of quiz names
-        # quiz_grades_df['quiz'] = quiz_grades_df['quiz'].replace(
-        #     {37: 'quiz 1', 38: 'quiz 2', 39: 'quiz 3', 40: 'quiz 4', 41: 'quiz 5', 42: 'quiz 6', 43: 'quiz final',
-        #      -1: 0, 'Null': 0})
+    # Work with pandas.
+    # convert the grade type to float
+    quiz_grades_df.grade = quiz_grades_df.grade.astype(float)
+    quiz_grades_df['grade'] = quiz_grades_df['grade'].fillna(.0).astype(float)
 
-        # changing the values of quiz names with updated values for column 'quiz'
-        quiz_grades_df['quiz'] = quiz_grades_df['quiz'].replace(
-            {1: 'quiz 1', 2: 'quiz 2', 3: 'quiz 3', 4: 'quiz 4', 5: 'quiz 5', 6: 'quiz 6', 7: 'quiz 7', 8: 'quiz 8', 9: 'quiz 9',
-             -1: 0, 'Null': 0})
+    # display the panda file as float .0
+    pd.options.display.float_format = '{:,.0f}'.format
 
-        # eliminating invalid values
-        quiz_grades_df['grade'] = quiz_grades_df['grade'].replace({-1: 0, 'Null': 0})
+    # eliminating invalid values
+    quiz_grades_df['grade'] = quiz_grades_df['grade'].replace({-1: 0, 'Null': 0})
 
-        # specifying the current user data for grades
-        quiz_grades_df_edited = quiz_grades_df.loc[quiz_grades_df['userid'] == current_user]
+    # specifying the current user data for grades
+    quiz_grades_df_edited = quiz_grades_df.loc[quiz_grades_df['userid'] == current_user]
 
-        # normalizing the values of the Graph(lazy way)
-        quiz1nor = quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 1', 'grade']
-        quiz2nor = quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 2', 'grade']
-        quiz4nor = quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 4', 'grade']
-        quiz6nor = quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 6', 'grade']
+    # changing names dynamically depends on number of quizzes
+    quizes_nums = set()
+    # the name of all attended quizzes ['quiz 4', ..]
+    quiz_names = []
+    for i in quiz_grades_df_edited['quiz']:
+        quizes_nums.add(i)
 
-        quiz1_changed_value = ((quiz1nor - 0) / (3 - 0)) * 10
-        quiz2_changed_value = ((quiz2nor - 0) / (4 - 0)) * 10
-        quiz4_changed_value = ((quiz4nor - 0) / (3 - 0)) * 10
-        quiz6_changed_value = ((quiz6nor - 0) / (3 - 0)) * 10
+    for i in quizes_nums:
+        quiz_grades_df_edited['quiz'] = quiz_grades_df_edited['quiz'].replace({i: 'quiz ' + str(i)})
+        quiz_names.append('quiz ' + str(i))
 
-        quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 1', 'grade'] = quiz1_changed_value
-        quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 2', 'grade'] = quiz2_changed_value
-        quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 4', 'grade'] = quiz4_changed_value
-        quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == 'quiz 6', 'grade'] = quiz6_changed_value
+    quiznor = []
+    # normalizing the values of the Graph
+    for i in quiz_grades_df_edited['quiz']:
+        try:
+            value = (quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == i, 'grade'].item())
+            try:
+                quiznor.append(value)
+            except:
+                pass
+        except:
+            pass
 
-        # changing the values of assignment
-        # assign_grades_df['assignment'] = assign_grades_df['assignment'].replace(
-        #     {27: 'AS1 - W3', 28: 'AS2 - W5', 30: 'AS3 - W10', 31: 'AS4 - W11', -1: 0, 'Null': 0})
+    quiz_changed_values = []
+    counter_index = 0
+    for i in all_quizzes:
+        for j in quizes_nums:
+            if i == j:
+                max_value = max_value_of_each_quiz1[j - 1]
+                p = quiznor[counter_index]
+                counter_index += 1
+                mino = 0
+                try:
+                    value = ((p - mino) / (max_value - mino)) * 10
+                    try:
+                        quiz_changed_values.append(value)
+                    except:
+                        pass
+                except:
+                    pass
 
-        # changing the values of assignment with updated values for column 'assignment'
-        assign_grades_df['assignment'] = assign_grades_df['assignment'].replace(
-            {1: 'AS1', 
-            2: 'AS2', 
-            3: 'AS3', 
-            4: 'AS4',
-            5: 'AS5',
-            6: 'AS6',
-            7: 'AS7',
-            8: 'AS8',
-            9: 'AS9',
-            10: 'AS10',
-            11: 'AS11',
-            12: 'AS12',
-            13: 'AS13',
-            14: 'AS14',
-            -1: 0, 'Null': 0})
+    # change the normalized values in the dataframe
+    counter = 0
+    for i in quiz_names:
+        quiz_grades_df_edited.loc[quiz_grades_df_edited['quiz'] == i, 'grade'] = quiz_changed_values[counter]
+        counter += 1
 
-        assign_grades_df['grade'] = assign_grades_df['grade'].replace({-1: 0, 'Null': 0})
+    assign_grades_df['grade'] = assign_grades_df['grade'].replace({-1: 0, 'Null': 0})
 
-        # specifying current user data for assignment
-        assign_edited = assign_grades_df.loc[assign_grades_df['userid'] == current_user]
+    # specifying current user data for assignment
+    assign_edited = assign_grades_df.loc[assign_grades_df['userid'] == current_user]
 
-        # Work with json data.
-        # converting quiz grades to json data
-        user_quiz_grades = quiz_grades_df_edited.to_json(orient="columns")
+    # changing the values of assignment
+    assignment_nums = set()
+    assignment_names = []
+    for i in assign_edited['assignment']:
+        assignment_nums.add(i)
 
-        # converting assign grades to json data
-        user_assign_grades = assign_edited.to_json(orient="columns")
+    for i in assignment_nums:
+        assign_edited['assignment'] = assign_edited['assignment'].replace({i: 'As - w' + str(i)})
+        assignment_names.append('As - w' + str(i))
 
-        # combined both data frames in a list
-        list_df = [user_quiz_grades, user_assign_grades]
+    # Work with json.
+    # converting quiz grades to json data
+    list_string = list(map(str, all_quizzes))
+    list_string2 = list(map(str, all_assignment))
 
-        # convert a subset of Python objects into a json string. (can be used later)
-        json_data = json.dumps(list_df)
+    user_quiz_grades = quiz_grades_df_edited.to_json(orient="columns")
 
-        return list_df
+    # converting assign grades to json data
+    user_assign_grades = assign_edited.to_json(orient="columns")
+
+    # combined both data frames in a list
+    list_df = [user_quiz_grades, user_assign_grades, quiz_names, list_string, assignment_names, list_string2]
+
+    # convert a subset of Python objects into a json string. (can be used later)
+    json_data = json.dumps(list_df)
+
+    return list_df
