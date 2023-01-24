@@ -3,7 +3,6 @@ from dash import html
 import dash_bootstrap_components as dbc
 from group_services.planning_service import *
 from dash.dependencies import Input, Output
-import re
 
 dash.register_page(__name__,
                    path='/planning',
@@ -39,7 +38,7 @@ def fetch_data_on_user_select(user_id):
                             dbc.CardBody(
                                 [
                                     html.H4(assignment['name'], className='card-title'),
-                                    html.Img(src='assets/check2-circle.svg',
+                                    html.Img(src=whichIcon(assignment["status"]),
                                              style={'position': 'absolute', 'top': '2rem', 'right': '2rem'}),
                                     html.H5(deadline(assignment['duedate']), className='deadline duedate'),
                                     html.P(cleanhtml(assignment['intro']), className='card-text', style={'margin': '2rem'}),
