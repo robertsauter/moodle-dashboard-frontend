@@ -190,7 +190,7 @@ def fetch_selected_assessment(user_id):
     missed_per_assignment = number_all_assignment / 100
 
     # creating Assignment Feedback
-    assa_feedback = "you have missed the Quizzes " + str(missed_assignment) + " times.  "
+    assa_feedback = "you have missed the Assignments " + str(missed_assignment) + " times.  "
 
     # Feedback possibilities for assignment
     if missed_assignment <= 40 * missed_per_assignment and total_ass_grades >= 60 * total_per_grade_assignment:
