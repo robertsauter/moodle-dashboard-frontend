@@ -15,8 +15,7 @@ def fetch_data(user_id, eu):
     df = pd.read_csv(url)
 
     #default_user = str(63)
-    user = str(int(user_id)-2)
-    #print(default_user)
+    user = str(user_id)
 
     # user quisez
     Quiz_module_id = ['610', '616', '664', '669', '679', '697']

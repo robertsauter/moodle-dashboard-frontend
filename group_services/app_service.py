@@ -6,7 +6,7 @@ def fetch_users():
     result = query.operation()[0]
     return result.get('result')
 
-# fetch all firctnames and lastnames of enrolled users (course 3)
+# fetch all firstnames and lastnames of enrolled users (course 3)
 def fetch_users_names():
     query = SQLHandlerFacade('SELECT u.firstname, u.lastname FROM mdl_user_enrolments ue JOIN mdl_enrol e ON e.id = ue.enrolid JOIN mdl_course c ON c.id = e.courseid JOIN mdl_user u ON u.id = ue.userid WHERE c.id = 3;')
     result = query.operation()

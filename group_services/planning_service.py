@@ -49,7 +49,6 @@ def currentDate():
 # List of assignments
 def assignmentsToDisplay(user, dataset):
   assignmentsList = []
-
   for submission in dataset["result_assign_submission"]: # going through submissions
     statusDict = {}
     if int(submission["userid"]) == int(user): # pick submissions from the user
