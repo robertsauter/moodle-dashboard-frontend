@@ -249,23 +249,52 @@ def fetch_data_on(userId):
         css=[{'selector': 'table', 'rule': 'table-layout: fixed'}],
     )
     return dbc.Container([
-    dbc.Row([dbc.Col([html.H3("Quiz",style={'margin-top':'30px','margin-left':'15px'}),
+    dbc.Row([dbc.Col([html.H3("Quiz",style={'margin-top':'30px','margin-left':'15px'},
+                              id="tooltip-target: Quiz"),
                  dbc.Progress(label=quiz_perc, value=quiz_perc, max=100, striped=True, color="success",
                               style={'height': '20px','margin-left' :'20px','margin-down':'30px'}),
                  dbc.Row(children=[quiz_table1,quiz_table2], style={"height": "65vh"}),html.Br(),html.Br()],width=6),
-            dbc.Col([html.H3("Assignment",style={'margin-top':'30px','margin-left':'15px'}),
+            dbc.Col([html.H3("Assignment",style={'margin-top':'30px','margin-left':'15px'},
+                             id="tooltip-target: Assignment"),
                    dbc.Progress(label=assignment_perc, value=assignment_perc, max=100, striped=True,
                                 color="success", style={'height': '20px','margin-left' :'20px','margin-down':'30px'}),
             dbc.Row(children=[assign_table1,assign_table2], style={"height": "65vh"}),html.Br(),html.Br()],width=6),
-    dbc.Row([dbc.Col([html.H3("URL",style={'margin-left':'15px','margin-top':'30px'}),
+    dbc.Row([dbc.Col([html.H3("URL",style={'margin-left':'15px','margin-top':'30px'},
+                              id="tooltip-target: URL"),
                       dbc.Progress(label=url_perc, value=url_perc, max=100, striped=True, color="success",
                                    style={'height': '20px','margin-left' :'20px','margin-down':'30px'}),
                       dbc.Row(children=[url_table1,url_table2], style={"height": "65vh"})],width=6)
-            ,dbc.Col([html.H3("File",style={'margin-left':'15px','margin-top':'30px'}),
+            ,dbc.Col([html.H3("File",style={'margin-left':'15px','margin-top':'30px'},
+                              id="tooltip-target: File"),
                        dbc.Progress(label=file_perc, value=file_perc, max=100, striped=True, color="success",
                                     style={'height': '20px', 'margin-left': '20px','margin-down':'30px'}),
                        dbc.Row(children=[file_table1,file_table2], style={"height": "65vh"})],width=6)
-            ])])])
+            ])]),
+        # tooltips by hovering over titles (Quiz, Assignment, URL, File)
+        dbc.Tooltip(
+            "Quizzes will help you reflect if you've understood the current topic correctly. "
+            "They help you to clarify for yourself on which topics you might have another close look into, "
+            "to understand it completely. Let's give them a try!",
+            target="tooltip-target: Quiz", placement='top'
+        ),
+        dbc.Tooltip(
+            "Since Assignments are graded you should put more effort to them than to the quizzes. "
+            "They may even be part of your final grade or get you bonus points for your final exam, so let's rock them! "
+            "If you're not sure ask your teacher about it.",
+            target="tooltip-target: Assignment", placement='top'
+        ),
+        dbc.Tooltip(
+            "Contains Lecture Videos and Webinars, which will help you understand the underlying theories"
+            "and provide you an overview of the important topics. Let's have a good look at them!",
+            target="tooltip-target: URL", placement='top'
+        ),
+        dbc.Tooltip(
+            "Files include slides of the lecture videos/webinars, so they help you understand the underlying "
+            "theories as well. Especially if you didn't get a smaller part of the topic, you can have a look at the slides"
+            "to help you understand it without watching the whole video again. Let's have a close look at them!",
+            target="tooltip-target: File", placement='top'
+        ),
+    ])
 
 layout = html.Div([
     dbc.Container(id='dataDependingOnUserIdOP')
