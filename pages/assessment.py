@@ -38,7 +38,7 @@ sidebar = html.Div(
         ),
         dcc.Tabs(id="tabs", value='first',className="tabs-header", children=[
             dcc.Tab(label='Quizzes', value='first',className='custom-tab', style= {"background-color":"orange"}),
-            dcc.Tab(label='Assignment', value='second',className='custom-tab',),
+            dcc.Tab(label='Assignment', value='second',className='custom-tab',style= {"background-color":"orange"}),
         ]
         ),
     ],
