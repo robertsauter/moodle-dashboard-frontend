@@ -15,7 +15,7 @@ def fetch_data(user_id, eu):
     df = pd.read_csv(url)
 
     #default_user = str(63)
-    user = str(user_id)
+    user = user_id
 
     # user quisez
     Quiz_module_id = ['610', '616', '664', '669', '679', '697']
@@ -132,9 +132,9 @@ def generateLink(data):
         data['Module_id'] = new.str.split("'", n=1, expand=True)[0]
         link = []
         for i in range(len(data)):
-            print(data.iloc[i, 5])
+            #print(data.iloc[i, 5])
             component = data.iloc[i, 5]
-            print(data.iloc[i, 8])
+            #print(data.iloc[i, 8])
             id = data.iloc[i, 8]
             if id == None:
                 link.append('None')
@@ -148,6 +148,6 @@ def generateLink(data):
                     link.append(moodleURL + 'quiz/view.php?id=' + id)
                 elif component == 'Assignment':
                     link.append(moodleURL + 'assign/view.php?id=' + id)
-                print(link[i])
+                #print(link[i])
 
         return link

@@ -32,8 +32,8 @@ def fetch_selected_progress(user_id):
         user_all_activities = pd.read_json(data[0])
         unseen = pd.read_json(data[1])
         perc = pd.read_json(data[2])
-        print("its the new fetch data")
-        print(user_all_activities)
+        #print("its the new fetch data")
+        #print(user_all_activities)
 
         # getting the percentages from the perc df
         quiz_perc = perc[0][0]
@@ -195,7 +195,7 @@ def fetch_selected_progress(user_id):
         assign_data = pd.DataFrame({'Completed':user_all_activities[user_all_activities['Component'] == "Assignment"]['Event context'],
                                 'Uncompleted':unseen[unseen['Component'] == "Assignment"]['Event context']})
         assign_values = assign_data.values
-        print(assign_values)
+        #print(assign_values)
         '''i = assign_data.index
         for x, y in assign_values:
         print('x:' , x)
@@ -379,7 +379,7 @@ def fetch_selected_progress(user_id):
         file_data = pd.DataFrame()
         file_data['Completed'] = user_all_activities[user_all_activities['Component'] == "File"]['Event context']
         file_data['Uncompleted'] = unseen[unseen['Component'] == "File"]['Event context']
-        print(file_data.to_dict())
+        #print(file_data.to_dict())
 
         file_table = dash_table.DataTable(
         id='file_table',
