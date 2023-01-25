@@ -37,17 +37,17 @@ def fetch_selected_assessment(user_id):
     # This is a plotly graph object to create the same bar chart
     # creating bar chart for quiz
     fig1 = px.bar(quiz_grades_df_edited, x='quiz', y='grade',
-                  labels={'quiz': '<b> quiz name <b>', 'grade': '<b> your grade <b>'}
-                  , color='quiz', text='grade', range_y=[0, 12],
-                  #title='Quiz Grades'
-                  )
+                labels={'quiz': '<b> quiz name <b>', 'grade': '<b> your grade <b>'}
+                ,color='quiz', text='grade', range_y=[0, 12]
+                #, title='Quiz Grades'
+                )
 
     # creating bar chart for assignment
     fig2 = px.bar(assign_edited, x='assignment', y='grade',
-                  labels={'assignment': '<b> assignment name <b>', 'grade': '<b> your grade <b>'}
-                  ,  color='assignment', text='grade', range_y=[0, 12]
-                  #, title='<b> Assignment Grades <b>'
-                  )
+                labels={'assignment': '<b> assignment name <b>', 'grade': '<b> your grade <b>'}
+                , color='assignment', text='grade', range_y=[0, 12]
+                #, title='<b> Assignment Grades <b>'
+                )
 
     # changing the quiz text size and background
     fig1.update_traces(texttemplate='%{text:.2s}', textposition='outside')
@@ -137,14 +137,15 @@ def fetch_selected_assessment(user_id):
 
     # Feedback possibilities for Quizzes
     if missed_quizzes <= 40 * missed_per_quiz and total_grade >= 60 * total_per_grade:
-        quiz_feedback += " you are doing very good keep going."
+        quiz_feedback += " Congrats! Looks like your learning method fits you, your results are impressive."
     elif missed_quizzes <= 50 * missed_per_quiz and total_grade >= 45 * total_per_grade:
-        quiz_feedback += "you are still doing well but focus more on your materials and study more to achieve better " \
-                         "results."
+        quiz_feedback += " Great job, you improved! What has helped you getting better? Reflect and keep going!"
     elif missed_quizzes <= 65 * missed_per_quiz and total_grade >= 35 * total_per_grade:
-        quiz_feedback += "your grades is not looking very good. You need to focus more or get help from your Professor."
+        quiz_feedback += "Hey! The best thing to do is to look at the learning materials again. If you have any " \
+                         "questions, contact someone who can help you. "
     else:
-        quiz_feedback += "contact your professor."
+        quiz_feedback += "Don‘t worry and focus on the lectures. Helpful tip: Try out different learning methods and " \
+                         "find out what works best for you. Get in touch with your professor."
 
     # fetching all Assignment grades of the given user if not available then 0
     attended_assignment = data[4]
@@ -194,14 +195,15 @@ def fetch_selected_assessment(user_id):
 
     # Feedback possibilities for assignment
     if missed_assignment <= 40 * missed_per_assignment and total_ass_grades >= 60 * total_per_grade_assignment:
-        assa_feedback += " you are doing very good keep going."
+        assa_feedback += " Congrats! Looks like your learning method fits you, your results are impressive."
     elif missed_assignment <= 50 * missed_per_assignment and total_ass_grades >= 45 * total_per_grade_assignment:
-        assa_feedback += "you are still doing well but focus more on your materials and study more to achieve better " \
-                         "results."
+        assa_feedback += " Great job, you improved! What has helped you getting better? Reflect and keep going!"
     elif missed_assignment <= 65 * missed_per_assignment and total_ass_grades >= 35 * total_per_grade_assignment:
-        assa_feedback += "your grades is not looking very good. You need to focus more or get help from your Professor."
+        assa_feedback += " Hey! The best thing to do is to look at the learning materials again. If you have any " \
+                         "questions, contact someone who can help you. "
     else:
-        assa_feedback += "contact your professor."
+        assa_feedback += " Don‘t worry and focus on the lectures. Helpful tip: Try out different learning methods and " \
+                         "find out what works best for you. Get in touch with your professor. "
 
     # This is the html layout, that is displayed on the page
     return html.Div(children=[
@@ -224,7 +226,7 @@ def fetch_selected_assessment(user_id):
             trigger="click",
         ),
 
-        html.Br(),html.Br(),html.Br(),html.Br(),
+        html.Br(), html.Br(), html.Br(), html.Br(),
 
         html.H2('Assignment Grades'),
         dcc.Graph(figure=fig2),
