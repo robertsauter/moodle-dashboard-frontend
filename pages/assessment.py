@@ -17,16 +17,46 @@ dash.register_page(__name__,
                    title='Assessment')
 app = Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
 
+
+# styling the sidebar
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": "55px",
+    "left": 0,
+    "bottom": 0,
+    "width": "16rem",
+    "padding": "2rem 1rem",
+    "background-color": "#F0F8FF",
+}
+
+sidebar = html.Div(
+    [
+        html.H2("Assessment", className="display-4",style={"font-size": "2.5rem"}),
+        html.Hr(),
+        html.P(
+            "Grades of students for Quizzes and Assignments", className="lead"
+        ),
+        dcc.Tabs(id="tabs", value='first',className="tabs-header", children=[
+            dcc.Tab(label='Quizzes', value='first',className='custom-tab', style= {"background-color":"orange"}),
+            dcc.Tab(label='Assignment', value='second',className='custom-tab',style= {"background-color":"orange"}),
+        ]
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+
 layout = html.Div([
-    html.Div(id='assessmentDataDependingOnUserId')
+    html.Div(id='assessmentDataDependingOnUserId'),
+    sidebar,
 ])
 
 @dash.callback(
     Output('assessmentDataDependingOnUserId', 'children'),
     Input('userId', 'data'),
+    Input("tabs", "value"),
 )
-def fetch_selected_assessment(user_id):
-
+def fetch_selected_assessment(user_id,tabs):
     # This is the JSON object, that you can use to display your visualizations :)
     data = get_results(user_id, assessment_data)
 
@@ -37,17 +67,17 @@ def fetch_selected_assessment(user_id):
     # This is a plotly graph object to create the same bar chart
     # creating bar chart for quiz
     fig1 = px.bar(quiz_grades_df_edited, x='quiz', y='grade',
-                labels={'quiz': '<b> quiz name <b>', 'grade': '<b> your grade <b>'}
-                ,color='quiz', text='grade', range_y=[0, 12]
-                #, title='Quiz Grades'
-                )
+                  labels={'quiz': '<b> quiz name <b>', 'grade': '<b> your grade <b>'}
+                  , color='quiz', text='grade', range_y=[0, 12]
+                  # , title='Quiz Grades'
+                  )
 
     # creating bar chart for assignment
     fig2 = px.bar(assign_edited, x='assignment', y='grade',
-                labels={'assignment': '<b> assignment name <b>', 'grade': '<b> your grade <b>'}
-                , color='assignment', text='grade', range_y=[0, 12]
-                #, title='<b> Assignment Grades <b>'
-                )
+                  labels={'assignment': '<b> assignment name <b>', 'grade': '<b> your grade <b>'}
+                  , color='assignment', text='grade', range_y=[0, 12]
+                  # , title='<b> Assignment Grades <b>'
+                  )
 
     # changing the quiz text size and background
     fig1.update_traces(texttemplate='%{text:.2s}', textposition='outside')
@@ -205,40 +235,48 @@ def fetch_selected_assessment(user_id):
         assa_feedback += " Don‘t worry and focus on the lectures. Helpful tip: Try out different learning methods and " \
                          "find out what works best for you. Get in touch with your professor. "
 
-    # This is the html layout, that is displayed on the page
-    return html.Div(children=[
-        html.H1('Assessment page', style={'marginBottom': '2rem'}),
+    if tabs == "first":
+        return [
+            html.Br(), html.Br(),
+            #html.H1('Assessment page', style={'marginBottom': '2rem'}),
+            html.H2('Quiz Grades'),
+            dcc.Graph(
+                figure=fig1,
+                style={'marginBottom': '5rem'}
+            ),
+            # Button for feedback
+            dbc.Button(
+                "Quiz Feedback",
+                id="popover-target",
+                className="me-1",
+            ),
+            dbc.Popover(
+                dbc.PopoverBody(f"{quiz_feedback}"),
+                target="popover-target",
+                trigger="click",
+            )
+        ]
+    elif tabs == "second":
+        return [
+            html.Br(), html.Br(),
+            html.H2('Assignment Grades'),
+            dcc.Graph(figure=fig2),
+            dbc.Button(
+                "Assignment Feedback",
+                id="popover-target2",
+                className="me-1",
+            ),
+            dbc.Popover(
+                dbc.PopoverBody(f"{assa_feedback}"),
+                target="popover-target2",
+                trigger="click",
+            ),
 
-        html.H2('Quiz Grades'),
-        dcc.Graph(
-            figure=fig1,
-            style={'marginBottom': '5rem'}
-        ),
-        # Button for feedback
-        dbc.Button(
-            "Quiz Feedback",
-            id="popover-target",
-            className="me-1",
-        ),
-        dbc.Popover(
-            dbc.PopoverBody(f"{quiz_feedback}"),
-            target="popover-target",
-            trigger="click",
-        ),
-
-        html.Br(), html.Br(), html.Br(), html.Br(),
-
-        html.H2('Assignment Grades'),
-        dcc.Graph(figure=fig2),
-        dbc.Button(
-            "Assignment Feedback",
-            id="popover-target2",
-            className="me-1",
-        ),
-        dbc.Popover(
-            dbc.PopoverBody(f"{assa_feedback}"),
-            target="popover-target2",
-            trigger="click",
-        ),
-
-    ])
+        ]
+    # If the user tries to reach a different page, return a 404 message
+    else:
+        return [
+            # html.H1("404: Not found", className="text-danger"),
+            # html.Hr(),
+            html.P(f"The pathname {tabs} was not recognised..."),
+        ]
