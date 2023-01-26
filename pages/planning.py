@@ -3,6 +3,7 @@ from dash import html
 import dash_bootstrap_components as dbc
 from group_services.planning_service import *
 from dash.dependencies import Input, Output
+import re
 
 dash.register_page(__name__,
                    path='/planning',
@@ -12,6 +13,13 @@ dash.register_page(__name__,
 
 # Our data
 data = operation()
+
+# HTML Cleaner to remove tags
+CLEANR = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+def cleanhtml(raw_html):
+  cleantext = re.sub(CLEANR, '', raw_html)
+  return cleantext
+
 
 # Layout
 layout = html.Div(children=[
@@ -38,10 +46,16 @@ def fetch_data_on_user_select(user_id):
                             dbc.CardBody(
                                 [
                                     html.H4(assignment['name'], className='card-title'),
-                                    html.Img(src=whichIcon(assignment["status"]),
+                                    html.Img(src=whichIcon(assignment["status"], assignment["duedate"]),
                                              style={'position': 'absolute', 'top': '2rem', 'right': '2rem'}),
                                     html.H5(deadline(assignment['duedate']), className='deadline duedate'),
-                                    html.P(cleanhtml(assignment['intro']), className='card-text', style={'margin': '2rem'}),
+                                    html.Details([
+                                        html.Summary('Assignment description'),
+                                        html.Div(
+                                            html.P(cleanhtml(assignment['intro']),
+                                                   className='card-text', style={'margin': '2rem'})
+                                        )
+                                    ])
 
                                 ]
                             ), className='done' if (assignment["status"] == "submitted") else 'unfinished' if int(assignment["duedate"]) < currentDate() else ""
