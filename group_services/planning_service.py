@@ -61,10 +61,10 @@ def assignmentsToDisplay(user, dataset):
   return(assignmentsList)
 
 # Icons
-def whichIcon(status):
+def whichIcon(status, duedate):
     if status == "submitted":
         icon_src = "assets/check2-circle.svg"
-    elif status == "unfinished":
+    elif int(duedate) < currentDate():
         icon_src = "assets/x-circle.svg"
     else:
         icon_src = ""
