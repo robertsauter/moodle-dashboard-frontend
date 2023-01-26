@@ -253,12 +253,12 @@ def fetch_data_on(userId):
                               id="tooltip-target: Quiz"),
                  dbc.Progress(label=quiz_perc, value=quiz_perc, max=100, striped=True, color="success",
                               style={'height': '20px','margin-left' :'20px','margin-down':'30px'}),
-                 dbc.Row(children=[quiz_table1,quiz_table2], style={"height": "65vh"}),html.Br(),html.Br()],width=6),
+                 dbc.Row(children=[quiz_table1,quiz_table2], style={"height": "65vh"})],width=6),
             dbc.Col([html.H3("Assignment",style={'margin-top':'30px','margin-left':'15px'},
                              id="tooltip-target: Assignment"),
                    dbc.Progress(label=assignment_perc, value=assignment_perc, max=100, striped=True,
                                 color="success", style={'height': '20px','margin-left' :'20px','margin-down':'30px'}),
-            dbc.Row(children=[assign_table1,assign_table2], style={"height": "65vh"}),html.Br(),html.Br()],width=6),
+            dbc.Row(children=[assign_table1,assign_table2], style={"height": "65vh"})],width=6)]),
     dbc.Row([dbc.Col([html.H3("URL",style={'margin-left':'15px','margin-top':'30px'},
                               id="tooltip-target: URL"),
                       dbc.Progress(label=url_perc, value=url_perc, max=100, striped=True, color="success",
@@ -269,7 +269,7 @@ def fetch_data_on(userId):
                        dbc.Progress(label=file_perc, value=file_perc, max=100, striped=True, color="success",
                                     style={'height': '20px', 'margin-left': '20px','margin-down':'30px'}),
                        dbc.Row(children=[file_table1,file_table2], style={"height": "65vh"})],width=6)
-            ])]),
+            ]),
         # tooltips by hovering over titles (Quiz, Assignment, URL, File)
         dbc.Tooltip(
             "Quizzes will help you reflect if you've understood the current topic correctly. "
