@@ -13,13 +13,15 @@ data = fetch_quiz_grades()
 
 layout = html.Div([
     html.Div([
-        html.H1('Moodle Dashboard'),
-        html.P('This is the homepage of the moodle analytics dashboard!'),
+        html.Br(),
+        html.H1('Welcome to our Moodle Analytics Dashboard'),
+        html.Img(src='/assets/Moodle-logo.png', className="ml-auto", style={'height':'150px', 'width':'550px'}),
+        # html.P('This is the homepage of the moodle analytics dashboard!'),
     ]),
-    html.H1('Fetched data on load'),
-    html.P('This data is fetched every time the page is loaded. Just put the request before the layout.'),
-    html.P(f'Fetched data: {str(data)}'),
-    html.Div(id='dataDependingOnUserId')
+    # html.H1('Fetched data on load'),
+    # html.P('This data is fetched every time the page is loaded. Just put the request before the layout.'),
+    # html.P(f'Fetched data: {str(data)}'),
+    # html.Div(id='dataDependingOnUserId')
 ])
 
 
