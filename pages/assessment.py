@@ -17,16 +17,46 @@ dash.register_page(__name__,
                    title='Assessment')
 app = Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
 
+
+# styling the sidebar
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": "55px",
+    "left": 0,
+    "bottom": 0,
+    "width": "16rem",
+    "padding": "2rem 1rem",
+    "background-color": "#F0F8FF",
+}
+
+sidebar = html.Div(
+    [
+        html.H2("Assessment", className="display-4",style={"font-size": "2.5rem"}),
+        html.Hr(),
+        html.P(
+            "Grades of students for Quizzes and Assignments", className="lead"
+        ),
+        dcc.Tabs(id="tabs", value='first',className="tabs-header", children=[
+            dcc.Tab(label='Quizzes', value='first',className='custom-tab', style= {"background-color":"orange"}),
+            dcc.Tab(label='Assignment', value='second',className='custom-tab',style= {"background-color":"orange"}),
+        ]
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+
 layout = html.Div([
-    html.Div(id='assessmentDataDependingOnUserId')
+    html.Div(id='assessmentDataDependingOnUserId'),
+    sidebar,
 ])
 
 @dash.callback(
     Output('assessmentDataDependingOnUserId', 'children'),
     Input('userId', 'data'),
+    Input("tabs", "value"),
 )
-def fetch_selected_assessment(user_id):
-
+def fetch_selected_assessment(user_id,tabs):
     # This is the JSON object, that you can use to display your visualizations :)
     data = get_results(user_id, assessment_data)
 
@@ -37,17 +67,17 @@ def fetch_selected_assessment(user_id):
     # This is a plotly graph object to create the same bar chart
     # creating bar chart for quiz
     fig1 = px.bar(quiz_grades_df_edited, x='quiz', y='grade',
-                labels={'quiz': '<b> quiz name <b>', 'grade': '<b> your grade <b>'}
-                ,color='quiz', text='grade', range_y=[0, 12]
-                #, title='Quiz Grades'
-                )
+                  labels={'quiz': '<b> quiz name <b>', 'grade': '<b> your grade <b>'}
+                  , color='quiz', text='grade', range_y=[0, 12]
+                  # , title='Quiz Grades'
+                  )
 
     # creating bar chart for assignment
     fig2 = px.bar(assign_edited, x='assignment', y='grade',
-                labels={'assignment': '<b> assignment name <b>', 'grade': '<b> your grade <b>'}
-                , color='assignment', text='grade', range_y=[0, 12]
-                #, title='<b> Assignment Grades <b>'
-                )
+                  labels={'assignment': '<b> assignment name <b>', 'grade': '<b> your grade <b>'}
+                  , color='assignment', text='grade', range_y=[0, 12]
+                  # , title='<b> Assignment Grades <b>'
+                  )
 
     # changing the quiz text size and background
     fig1.update_traces(texttemplate='%{text:.2s}', textposition='outside')
@@ -137,14 +167,15 @@ def fetch_selected_assessment(user_id):
 
     # Feedback possibilities for Quizzes
     if missed_quizzes <= 40 * missed_per_quiz and total_grade >= 60 * total_per_grade:
-        quiz_feedback += " you are doing very good keep going."
+        quiz_feedback += " Congrats! Looks like your learning method fits you, your results are impressive."
     elif missed_quizzes <= 50 * missed_per_quiz and total_grade >= 45 * total_per_grade:
-        quiz_feedback += "you are still doing well but focus more on your materials and study more to achieve better " \
-                         "results."
+        quiz_feedback += " Great job, you improved! What has helped you getting better? Reflect and keep going!"
     elif missed_quizzes <= 65 * missed_per_quiz and total_grade >= 35 * total_per_grade:
-        quiz_feedback += "your grades is not looking very good. You need to focus more or get help from your Professor."
+        quiz_feedback += "Hey! The best thing to do is to look at the learning materials again. If you have any " \
+                         "questions, contact someone who can help you. "
     else:
-        quiz_feedback += "contact your professor."
+        quiz_feedback += "Don‘t worry and focus on the lectures. Helpful tip: Try out different learning methods and " \
+                         "find out what works best for you. Get in touch with your professor."
 
     # fetching all Assignment grades of the given user if not available then 0
     attended_assignment = data[4]
@@ -190,53 +221,62 @@ def fetch_selected_assessment(user_id):
     missed_per_assignment = number_all_assignment / 100
 
     # creating Assignment Feedback
-    assa_feedback = "you have missed the Quizzes " + str(missed_assignment) + " times.  "
+    assa_feedback = "you have missed the Assignments " + str(missed_assignment) + " times.  "
 
     # Feedback possibilities for assignment
     if missed_assignment <= 40 * missed_per_assignment and total_ass_grades >= 60 * total_per_grade_assignment:
-        assa_feedback += " you are doing very good keep going."
+        assa_feedback += " Congrats! Looks like your learning method fits you, your results are impressive."
     elif missed_assignment <= 50 * missed_per_assignment and total_ass_grades >= 45 * total_per_grade_assignment:
-        assa_feedback += "you are still doing well but focus more on your materials and study more to achieve better " \
-                         "results."
+        assa_feedback += " Great job, you improved! What has helped you getting better? Reflect and keep going!"
     elif missed_assignment <= 65 * missed_per_assignment and total_ass_grades >= 35 * total_per_grade_assignment:
-        assa_feedback += "your grades is not looking very good. You need to focus more or get help from your Professor."
+        assa_feedback += " Hey! The best thing to do is to look at the learning materials again. If you have any " \
+                         "questions, contact someone who can help you. "
     else:
-        assa_feedback += "contact your professor."
+        assa_feedback += " Don‘t worry and focus on the lectures. Helpful tip: Try out different learning methods and " \
+                         "find out what works best for you. Get in touch with your professor. "
 
-    # This is the html layout, that is displayed on the page
-    return html.Div(children=[
-        html.H1('Assessment page', style={'marginBottom': '2rem'}),
+    if tabs == "first":
+        return [
+            html.Br(), html.Br(),
+            #html.H1('Assessment page', style={'marginBottom': '2rem'}),
+            html.H2('Quiz Grades'),
+            dcc.Graph(
+                figure=fig1,
+                style={'marginBottom': '5rem'}
+            ),
+            # Button for feedback
+            dbc.Button(
+                "Quiz Feedback",
+                id="popover-target",
+                className="me-1",
+            ),
+            dbc.Popover(
+                dbc.PopoverBody(f"{quiz_feedback}"),
+                target="popover-target",
+                trigger="click",
+            )
+        ]
+    elif tabs == "second":
+        return [
+            html.Br(), html.Br(),
+            html.H2('Assignment Grades'),
+            dcc.Graph(figure=fig2),
+            dbc.Button(
+                "Assignment Feedback",
+                id="popover-target2",
+                className="me-1",
+            ),
+            dbc.Popover(
+                dbc.PopoverBody(f"{assa_feedback}"),
+                target="popover-target2",
+                trigger="click",
+            ),
 
-        html.H2('Quiz Grades'),
-        dcc.Graph(
-            figure=fig1,
-            style={'marginBottom': '5rem'}
-        ),
-        # Button for feedback
-        dbc.Button(
-            "Quiz Feedback",
-            id="popover-target",
-            className="me-1",
-        ),
-        dbc.Popover(
-            dbc.PopoverBody(f"{quiz_feedback}"),
-            target="popover-target",
-            trigger="click",
-        ),
-
-        html.Br(), html.Br(), html.Br(), html.Br(),
-
-        html.H2('Assignment Grades'),
-        dcc.Graph(figure=fig2),
-        dbc.Button(
-            "Assignment Feedback",
-            id="popover-target2",
-            className="me-1",
-        ),
-        dbc.Popover(
-            dbc.PopoverBody(f"{assa_feedback}"),
-            target="popover-target2",
-            trigger="click",
-        ),
-
-    ])
+        ]
+    # If the user tries to reach a different page, return a 404 message
+    else:
+        return [
+            # html.H1("404: Not found", className="text-danger"),
+            # html.Hr(),
+            html.P(f"The pathname {tabs} was not recognised..."),
+        ]

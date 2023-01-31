@@ -23,8 +23,8 @@ def operation():
 
 def get_results(user_id, data):
     # logged in user
-    # current_user = 49
-    current_user = int(user_id) - 2
+    current_user = int(user_id)
+    
     quiz_grades_df, assign_grades_df = data
     # Work with pandas.
     # convert the grade type to float
