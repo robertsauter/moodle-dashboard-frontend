@@ -30,14 +30,11 @@ app.layout = html.Div(
                 )
                 for page in dash.page_registry.values()
             ],
-            # html.Img(src='/assets/Moodle-Icon-1024-corners.png', className="ml-auto",
-            # style={'height': '50px', 'width': '50px'}),  # orange icon
-            # blue icon
-            # brand=html.Img(src='/assets/icon-moodle.png', className="ml-auto",
-            # style={'height':'50px', 'width':'95px'}),
+            brand=html.Img(src='/assets/Moodle-Icon-1024-corners.png', className="ml-auto", style={'height':'50px', 'width':'50px'}), # orange icon
+            #brand=html.Img(src='/assets/icon-moodle.png', className="ml-auto", style={'height':'50px', 'width':'95px'}), # blue icon
             fixed='top',
-            style={'background': 'linear-gradient(0deg, #e15707 0, #f28224 100%)'},
-            # style =  {'background': 'linear-gradient(0deg, #0971B5 0, #00AEEE 100%)'}, #blue theme
+            style =  {'background': 'linear-gradient(0deg, #e15707 0, #f28224 100%)'},
+            #style =  {'background': 'linear-gradient(0deg, #0971B5 0, #00AEEE 100%)'}, #blue theme
         ),
         dbc.Container(
             [
@@ -52,15 +49,14 @@ app.layout = html.Div(
                 dash.page_container,
             ],
             style={
-                "margin-top": "6rem",
+                "marginTop": "6rem",
                 "height": "100%",
-                'border-radius': 20,
+                'borderRadius': 20,
                 "padding": "3rem 2rem",
                 'background': 'white',
-                'box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                'boxShadow': '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
             },
         )
-
     ]
 )
 

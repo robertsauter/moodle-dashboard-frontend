@@ -15,7 +15,7 @@ layout = html.Div([
     html.Div([
         html.Br(),
         html.H1('Welcome to our Moodle Analytics Dashboard'),
-        html.Img(src='/assets/Moodle-logo.png', className="ml-auto", style={'height':'150px', 'width':'550px'}),
+        html.Img(src='/assets/Moodle-logo.png', className="ml-auto", style={'height':'auto', 'maxWidth':'550px', 'width':'100%'}),
         # html.P('This is the homepage of the moodle analytics dashboard!'),
     ]),
     # html.H1('Fetched data on load'),
