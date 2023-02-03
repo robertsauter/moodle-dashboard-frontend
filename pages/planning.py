@@ -1,81 +1,74 @@
 import dash
-import requests
-from dash import html, dcc
-import plotly.graph_objects as go
+from dash import html
 import dash_bootstrap_components as dbc
-
+from group_services.planning_service import *
+from dash.dependencies import Input, Output
+import re
 
 dash.register_page(__name__,
                    path='/planning',
                    name='Planning',
                    title='Planning')
-#r = requests.get('http://localhost:5000/api/group/planning')
 
 
-# This is the JSON object, that you can use to display your visualizations :)
-#data = r.json()
+# Our data
+data = operation()
+
+# HTML Cleaner to remove tags
+CLEANR = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
+def cleanhtml(raw_html):
+  cleantext = re.sub(CLEANR, '', raw_html)
+  return cleantext
 
 
-# This is a dummy list of assignments, that we can iterate over to display on the page
-assignments = [
-    {'title': 'Assigment 1', 'desc': 'Blablabla', 'done': True},
-    {'title': 'Assigment 2', 'desc': 'Blablabla', 'done': True},
-    {'title': 'Assigment 3', 'desc': 'Blablabla', 'done': False},
-    {'title': 'Assigment 4', 'desc': 'Blablabla', 'done': False},
-    {'title': 'Assigment 5', 'desc': 'Blablabla', 'done': False}
-]
-# This is a python dict, that can be used to create a bar chart
-dict_figure = {
-    'data': [
-        {
-            'x': ['Assignment 1', 'Assignment 2', 'Assignment 3'],
-            'y': [10, 1, 5],
-            'type': 'bar',
-            'name': 'Grades'
-        }
-    ],
-    'layout': {
-        'title': 'Assignment grades'
-    }
-}
-# This is a plotly graph object to create the same bar chart
-graph_object_figure = go.Figure(
-    data=[go.Bar(x=['Assignment 1', 'Assignment 2', 'Assignment 3'], y=[10, 1, 5])],
-    layout=go.Layout(
-        title=go.layout.Title(text='Assignment grades')
-    )
-)
-
-
-# This is the html layout, that is displayed on the page
+# Layout
 layout = html.Div(children=[
     html.H1(
         'Planning page',
         style={'marginBottom': '2rem'}
     ),
-    html.H2('This is a list of items, to show you how to iterate and use bootstrap components'),
-    html.Ul(
-        [
-            html.Li(
-                dbc.Card(
-                    dbc.CardBody(
-                        [
-                            html.H4(assignment['title'], className='card-title'),
-                            html.P(assignment['desc'], className='card-text')
-                        ]
-                    ),
-                    className='done' if assignment['done'] else ''
-                ),
-                style={'marginBottom': '1rem'}
-            ) for assignment in assignments
-        ],
-        style={'listStyle': 'none', 'padding': '0', 'marginBottom': '5rem'}
-    ),
-    html.H2('Simple chart from a python dict'),
-    dcc.Graph(
-        figure=dict_figure,
-        style={'marginBottom': '5rem'}
-    ),
-    html.H2('Simple chart from a plotly graph object'),
-    dcc.Graph(figure=graph_object_figure)
+    html.H2('To do:'),
+    html.Div(id="assignmentsDisplayed")
 ])
+
+@dash.callback(
+    Output('assignmentsDisplayed', 'children'),
+    Input('userId', 'data'),
+)
+def fetch_data_on_user_select(user_id):
+
+    if len(assignmentsToDisplay(user_id, data)) > 0:
+        content = [
+            html.Ul(
+                [
+                    html.Li(
+                        dbc.Card(
+                            dbc.CardBody(
+                                [
+                                    html.H4(assignment['name'], className='card-title'),
+                                    html.Img(src=whichIcon(assignment["status"], assignment["duedate"]),
+                                             style={'position': 'absolute', 'top': '2rem', 'right': '2rem'}),
+                                    html.H5(deadline(assignment['duedate']), className='deadline duedate'),
+                                    html.Details([
+                                        html.Summary('Assignment description'),
+                                        html.Div(
+                                            html.P(cleanhtml(assignment['intro']),
+                                                   className='card-text', style={'margin': '2rem'})
+                                        )
+                                    ])
+
+                                ]
+                            ), className='done' if (assignment["status"] == "submitted") else 'unfinished' if int(assignment["duedate"]) < currentDate() else ""
+                        ),
+                        style={'marginBottom': '1rem'}
+
+                    ) for assignment in assignmentsToDisplay(user_id, data)
+                ],
+                style={'listStyle': 'none', 'padding': '0', 'marginBottom': '5rem'}
+            )
+        ]
+
+    else:
+        content = [html.P("There are no assignments due.")]
+
+    return content

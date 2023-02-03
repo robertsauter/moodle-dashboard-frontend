@@ -1,7 +1,6 @@
 from lib.sql_handler import SQLHandlerFacade
 import datetime
 import calendar
-import re
 
 def operation() -> dict:
     handler_assign = SQLHandlerFacade(query="SELECT id, name, intro, duedate FROM mdl_assign")
@@ -61,9 +60,13 @@ def assignmentsToDisplay(user, dataset):
 
   return(assignmentsList)
 
+# Icons
+def whichIcon(status, duedate):
+    if status == "submitted":
+        icon_src = "assets/check2-circle.svg"
+    elif int(duedate) < currentDate():
+        icon_src = "assets/x-circle.svg"
+    else:
+        icon_src = ""
 
-# HTML Cleaner to remove tags
-def cleanhtml(raw_html):
-  CLEANR = re.compile('<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});')
-  cleantext = re.sub(CLEANR, '', raw_html)
-  return cleantext
+    return icon_src

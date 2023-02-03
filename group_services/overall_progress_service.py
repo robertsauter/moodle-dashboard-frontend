@@ -1,31 +1,21 @@
 import json
 import pandas as pd
 import math
+from group_services.app_service import fetch_users_names
 
-def fetch_data(userId):
-    # reading the file localy
-    # df = pd.read_csv(r'C:\Users\admin\moodle-dashboard-backend\logs_LA_20__21_20221202-1706.csv')
 
+def operation():
+    operation_result, quiz_grades_df = fetch_users_names()
+    eu = quiz_grades_df.apply(lambda x: x.str.cat(sep=' '), axis=1).tolist()
+    return eu
+
+def fetch_data(user_id, eu):
     # reading the file from the repository
-    url = 'https://raw.githubusercontent.com/blueberryhub92/moodle-dashboard-backend/main/logs_LA_20__21_20221202-1706.csv'
+    url = 'logs_LA_20__21_20221202-1706.csv'
     df = pd.read_csv(url)
 
-    #  the list of all the enrolled users
-    eu = ['anonfirstname31 anonlastname31', 'anonfirstname62 anonlastname62', 'anonfirstname65 anonlastname65',
-     'anonfirstname51 anonlastname51', 'anonfirstname66 anonlastname66', 'anonfirstname47 anonlastname47',
-     'anonfirstname48 anonlastname48', 'anonfirstname68 anonlastname68', 'anonfirstname59 anonlastname59',
-     'anonfirstname64 anonlastname64', 'anonfirstname67 anonlastname67', 'anonfirstname53 anonlastname53',
-     'anonfirstname49 anonlastname49', 'anonfirstname55 anonlastname55', 'anonfirstname73 anonlastname73',
-     'anonfirstname60 anonlastname60', 'anonfirstname57 anonlastname57', 'anonfirstname70 anonlastname70',
-     'anonfirstname63 anonlastname63', 'anonfirstname54 anonlastname54', 'anonfirstname56 anonlastname56',
-     'anonfirstname61 anonlastname61', 'anonfirstname69 anonlastname69', 'anonfirstname58 anonlastname58',
-     'anonfirstname52 anonlastname52', 'anonfirstname71 anonlastname71', 'anonfirstname72 anonlastname72',
-     'anonfirstname21 anonlastname21']
-
-
-
-    # default_user = str(63)
-    user = userId
+    #default_user = str(63)
+    user = user_id
 
     # user quisez
     Quiz_module_id = ['610', '616', '664', '669', '679', '697']
@@ -142,9 +132,9 @@ def generateLink(data):
         data['Module_id'] = new.str.split("'", n=1, expand=True)[0]
         link = []
         for i in range(len(data)):
-            print(data.iloc[i, 5])
+            #print(data.iloc[i, 5])
             component = data.iloc[i, 5]
-            print(data.iloc[i, 8])
+            #print(data.iloc[i, 8])
             id = data.iloc[i, 8]
             if id == None:
                 link.append('None')
@@ -158,7 +148,6 @@ def generateLink(data):
                     link.append(moodleURL + 'quiz/view.php?id=' + id)
                 elif component == 'Assignment':
                     link.append(moodleURL + 'assign/view.php?id=' + id)
-                print(link[i])
+                #print(link[i])
 
         return link
-
