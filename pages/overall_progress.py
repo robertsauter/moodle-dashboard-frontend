@@ -265,7 +265,7 @@ def fetch_selected_progress(user_id):
                                 id="tooltip-target: Assignment"),
                         dbc.Progress(label=assignment_perc, value=assignment_perc, max=100, striped=True,
                                         color="success", style={'height': '20px','margin-left' :'20px','margin-down':'30px'}),
-                dbc.Row(children=[assign_table1,assign_table2], style={"height": "65vh"}),html.Br(),html.Br()],width=6)]),
+                dbc.Row(children=[assign_table1,assign_table2], style={"height": "65vh"})],width=6)]),
         dbc.Row([dbc.Col([html.H3("URL",style={'margin-left':'15px','margin-top':'30px'},
                                 id="tooltip-target: URL"),
                         dbc.Progress(label=url_perc, value=url_perc, max=100, striped=True, color="success",
